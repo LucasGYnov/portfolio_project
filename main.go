@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+
 	// "os"
 	// "path/filepath"
 	"regexp"
@@ -76,6 +77,7 @@ func main() {
 	http.Handle("/img_video/", http.StripPrefix("/img_video/", http.FileServer(http.Dir("img_video/"))))
 
 	fmt.Println("Serveur écoutant sur le port 6969...")
+	fmt.Println("http://localhost:6969")
 	log.Fatal(http.ListenAndServe("localhost:6969", nil))
 }
 
@@ -364,23 +366,23 @@ func (h *profilHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 type profilOtherHandler struct{}
 
 func (h *profilOtherHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-    username := r.URL.Query().Get("username")
-    if username == "" {
-        http.Error(w, "Nom d'utilisateur manquant", http.StatusBadRequest)
-        return
-    }
+	username := r.URL.Query().Get("username")
+	if username == "" {
+		http.Error(w, "Nom d'utilisateur manquant", http.StatusBadRequest)
+		return
+	}
 
-    var user User
-    err := db.QueryRow("SELECT id, email, username FROM utilisateurs WHERE username = ?", username).Scan(&user.ID, &user.Email, &user.Username)
-    if err != nil {
-        if err == sql.ErrNoRows {
-            http.Error(w, "Utilisateur non trouvé", http.StatusNotFound)
-            return
-        }
-        http.Error(w, "Erreur lors de la récupération de l'utilisateur", http.StatusInternalServerError)
-        log.Println("Erreur lors de la récupération de l'utilisateur:", err)
-        return
-    }
+	var user User
+	err := db.QueryRow("SELECT id, email, username FROM utilisateurs WHERE username = ?", username).Scan(&user.ID, &user.Email, &user.Username)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			http.Error(w, "Utilisateur non trouvé", http.StatusNotFound)
+			return
+		}
+		http.Error(w, "Erreur lors de la récupération de l'utilisateur", http.StatusInternalServerError)
+		log.Println("Erreur lors de la récupération de l'utilisateur:", err)
+		return
+	}
 
-    renderTemplate(w, "./src/profilOther.html", user)
+	renderTemplate(w, "./src/profilOther.html", user)
 }
