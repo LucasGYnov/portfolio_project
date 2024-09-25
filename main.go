@@ -8,7 +8,7 @@ import (
 
 	// "os"
 	// "path/filepath"
-	"regexp"
+	//"regexp"
 	"text/template"
 
 	data "portfolio_project/Data"
@@ -19,36 +19,43 @@ import (
 
 type User struct {
 	ID       int
-	Email    string
 	Username string
 	Password string
 	Profile  string
 	DB       *sql.DB
 }
 
-type Comment struct {
-	ID       int
-	PostID   int
-	UserID   int
-	Username string
-	Content  string
+type Experience struct {
+	ID      int
+	Title   string
+	Content string
 }
 
-type Post struct {
-	ID       int
-	Title    string
-	Content  string
-	Video    string
-	Image    []string
-	UserID   int
-	Username string
-	Comments []Comment
+type Contact struct {
+	ID     int
+	Numero int
+	Email  string
+	Postal string
+}
+
+type Formation struct {
+	ID    int
+	Title string
+	Years int
+}
+
+type Tech struct {
+	ID      int
+	Title   string
+	Content string
 }
 
 type MainPageData struct {
 	IsLoggedIn     bool
 	ProfilePicture string
-	Posts          []Post
+	Experiences    []Experience
+	Formations     []Formation
+	Techs          []Tech
 }
 
 var (
@@ -64,7 +71,6 @@ func main() {
 	}
 
 	http.Handle("/", &mainPageHandler{})
-	http.Handle("/register", &registerHandler{})
 	http.Handle("/login", &loginHandler{})
 	http.Handle("/erreur", &errorHandler{})
 	http.Handle("/logout", &logoutHandler{})
@@ -77,7 +83,6 @@ func main() {
 	http.Handle("/img_video/", http.StripPrefix("/img_video/", http.FileServer(http.Dir("img_video/"))))
 
 	fmt.Println("Serveur écoutant sur le port 6969...")
-	fmt.Println("http://localhost:6969")
 	log.Fatal(http.ListenAndServe("localhost:6969", nil))
 }
 
@@ -102,12 +107,12 @@ func (h *mainPageHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		var data MainPageData
 		sessionCookie, err := r.Cookie("session_id")
 		if err == nil {
-			email, ok := sessions[sessionCookie.Value]
+			username, ok := sessions[sessionCookie.Value]
 			if ok {
 				data.IsLoggedIn = true
 				// Retrieve the profile picture of the user
 				var profilePicture string
-				err := db.QueryRow("SELECT profile_picture FROM utilisateurs WHERE email = ?", email).Scan(&profilePicture)
+				err := db.QueryRow("SELECT profile_picture FROM utilisateurs WHERE username = ?", username).Scan(&profilePicture)
 				if err == nil {
 					data.ProfilePicture = profilePicture
 				}
@@ -115,48 +120,13 @@ func (h *mainPageHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		}
 
 		// Retrieve posts with limit 7 and order by creation date
-		rows, err := db.Query("SELECT p.id, p.title, p.content, p.video, u.username FROM posts p JOIN utilisateurs u ON p.user_id = u.id ORDER BY p.created_at DESC LIMIT 7")
+		rows, err := db.Query("SELECT e.id, e.title, e.content FROM experience e JOIN utilisateurs u ON e.id = u.id")
 		if err != nil {
 			http.Error(w, "Erreur lors de la récupération des posts", http.StatusInternalServerError)
 			log.Println("Erreur lors de la récupération des posts:", err)
 			return
 		}
 		defer rows.Close()
-
-		for rows.Next() {
-			var post Post
-			var videoPtr sql.NullString
-			err := rows.Scan(&post.ID, &post.Title, &post.Content, &videoPtr, &post.Username)
-			if err != nil {
-				http.Error(w, "Erreur lors de la lecture des posts", http.StatusInternalServerError)
-				log.Println("Erreur lors de la lecture des posts:", err)
-				return
-			}
-			if videoPtr.Valid {
-				post.Video = videoPtr.String
-			}
-
-			// Retrieve associated images
-			imageRows, err := db.Query("SELECT image FROM posts WHERE post_id = ?", post.ID)
-			if err != nil {
-				http.Error(w, "Erreur lors de la récupération des images", http.StatusInternalServerError)
-				log.Println("Erreur lors de la récupération des images:", err)
-				return
-			}
-			defer imageRows.Close()
-
-			for imageRows.Next() {
-				var imagePath string
-				if err := imageRows.Scan(&imagePath); err != nil {
-					http.Error(w, "Erreur lors de la lecture des images", http.StatusInternalServerError)
-					log.Println("Erreur lors de la lecture des images:", err)
-					return
-				}
-				post.Image = append(post.Image, imagePath)
-			}
-
-			data.Posts = append(data.Posts, post)
-		}
 
 		renderTemplate(w, "./src/Main_page.html", data)
 		return
@@ -166,89 +136,6 @@ func (h *mainPageHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	http.NotFound(w, r)
-}
-
-type registerHandler struct{}
-
-func (h *registerHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	if r.Method == http.MethodGet {
-		renderTemplate(w, "./src/register.html", nil)
-		return
-	}
-	if r.Method == http.MethodPost {
-		if err := r.ParseForm(); err != nil {
-			setCookie(w, "error", "Erreur lors de la lecture du formulaire")
-			http.Redirect(w, r, "/register", http.StatusSeeOther)
-			return
-		}
-		email := r.FormValue("email")
-		username := r.FormValue("username")
-		password := r.FormValue("password")
-		if email == "" || username == "" || password == "" {
-			setCookie(w, "error", "Email, nom d'utilisateur ou mot de passe vide")
-			http.Redirect(w, r, "/register", http.StatusSeeOther)
-			return
-		}
-		emailPattern := `^[^\s@]+@[^\s@]+\.[^\s@]+$`
-		matched, err := regexp.MatchString(emailPattern, email)
-		if err != nil || !matched {
-			setCookie(w, "error", "Email invalide")
-			http.Redirect(w, r, "/register", http.StatusSeeOther)
-			return
-		}
-		if usernameExists(username) {
-			setCookie(w, "error", "Nom d'utilisateur deja pris, veuillez en choisir un autre")
-			http.Redirect(w, r, "/register", http.StatusSeeOther)
-			return
-		}
-		if emailExists(email) {
-			setCookie(w, "error", "Email deja existente, veuillez en choisir un autre")
-			http.Redirect(w, r, "/register", http.StatusSeeOther)
-			return
-		}
-		_, err = db.Exec("INSERT INTO utilisateurs (email, username, password) VALUES (?, ?, ?)", email, username, password)
-		if err != nil {
-			setCookie(w, "error", "Erreur lors de l'inscription")
-			log.Println("Erreur lors de l'insertion dans la base de données:", err)
-			http.Redirect(w, r, "/register", http.StatusSeeOther)
-			return
-		}
-		http.Redirect(w, r, "/login", http.StatusSeeOther)
-		return
-	}
-	http.NotFound(w, r)
-}
-
-func setCookie(w http.ResponseWriter, name, value string) {
-	cookie := &http.Cookie{
-		Name:   name,
-		Value:  value,
-		Path:   "/",
-		MaxAge: 10, // The cookie will be valid for 10 seconds
-	}
-	http.SetCookie(w, cookie)
-}
-
-func usernameExists(username string) bool {
-	var exists bool
-	query := "SELECT EXISTS (SELECT 1 FROM utilisateurs WHERE username = ?)"
-	err := db.QueryRow(query, username).Scan(&exists)
-	if err != nil {
-		log.Println("Erreur lors de la vérification du nom d'utilisateur :", err)
-		return true
-	}
-	return exists
-}
-
-func emailExists(email string) bool {
-	var exists bool
-	query := "SELECT EXISTS (SELECT 1 FROM utilisateurs WHERE email = ?)"
-	err := db.QueryRow(query, email).Scan(&exists)
-	if err != nil {
-		log.Println("Erreur lors de la vérification du nom d'utilisateur :", err)
-		return true
-	}
-	return exists
 }
 
 type loginHandler struct{}
@@ -263,18 +150,18 @@ func (h *loginHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "Erreur lors de la lecture du formulaire", http.StatusBadRequest)
 			return
 		}
-		email := r.FormValue("email")
+		username := r.FormValue("username")
 		password := r.FormValue("password")
-		if email == "" || password == "" {
-			setErrorCookie(w, "Email ou mot de passe vide")
+		if username == "" || password == "" {
+			setErrorCookie(w, "Username ou mot de passe vide")
 			http.Redirect(w, r, "/login", http.StatusSeeOther)
 			return
 		}
 		var dbPassword string
-		err := db.QueryRow("SELECT password FROM utilisateurs WHERE email = ?", email).Scan(&dbPassword)
+		err := db.QueryRow("SELECT password FROM utilisateurs WHERE username = ?", username).Scan(&dbPassword)
 		if err != nil {
 			if err == sql.ErrNoRows {
-				setErrorCookie(w, "Email ou mot de passe incorrect")
+				setErrorCookie(w, "Username ou mot de passe incorrect")
 				http.Redirect(w, r, "/login", http.StatusSeeOther)
 				return
 			}
@@ -290,7 +177,7 @@ func (h *loginHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		}
 		// Créer une session
 		sessionID := uuid.New().String()
-		sessions[sessionID] = email
+		sessions[sessionID] = username
 		cookie := &http.Cookie{
 			Name:  "session_id",
 			Value: sessionID,
@@ -346,14 +233,14 @@ func (h *profilHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/login", http.StatusSeeOther)
 		return
 	}
-	email, ok := sessions[sessionCookie.Value]
+	username, ok := sessions[sessionCookie.Value]
 	if !ok {
 		http.Redirect(w, r, "/login", http.StatusSeeOther)
 		return
 	}
 
 	var user User
-	err = db.QueryRow("SELECT id, email, username FROM utilisateurs WHERE email = ?", email).Scan(&user.ID, &user.Email, &user.Username)
+	err = db.QueryRow("SELECT id, username FROM utilisateurs WHERE username = ?", username).Scan(&user.ID, &user.Username)
 	if err != nil {
 		http.Error(w, "Erreur lors de la récupération des informations de l'utilisateur", http.StatusInternalServerError)
 		log.Println("Erreur lors de la récupération des informations de l'utilisateur:", err)
@@ -373,7 +260,7 @@ func (h *profilOtherHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var user User
-	err := db.QueryRow("SELECT id, email, username FROM utilisateurs WHERE username = ?", username).Scan(&user.ID, &user.Email, &user.Username)
+	err := db.QueryRow("SELECT id, username FROM utilisateurs WHERE username = ?", username).Scan(&user.ID, &user.Username)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			http.Error(w, "Utilisateur non trouvé", http.StatusNotFound)
