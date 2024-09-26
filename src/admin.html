@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="copyright" content="Copyright owner" />
+    <link rel="icon" href="" type="image/x-icon">
+    <link rel="stylesheet" href="../static/styleAdmin.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rubik+Mono+One&display=swap">
+    <title>Portfolio Menu Page</title>
+</head>
+<body>
+    <div class="portfolio-container">
+        <div class="portfolio-row row-1">
+            <div class="portfolio-col col-1">
+                <div class="info-box bio-box" onclick="openModal('helloModal')">
+                    <h5 class="greeting">Hello, I'm [Your Name]</h5>
+                    <p>Description about yourself.</p>
+                </div>
+                <div class="info-box image-box" onclick="openModal('imageModal')">
+                    <p>Image</p>
+                </div>
+            </div>
+            <div class="portfolio-col col-1">
+                <div class="info-box image-box" onclick="openModal('profileImageModal')">
+                    <p>Profile Pic</p>
+                </div>
+                <div class="info-box bio-box" onclick="openModal('aboutModal')">
+                    <h5>About Me</h5>
+                    <p>A brief description of your background or interests.</p>
+                </div>
+            </div>
+            <div class="portfolio-col col-2">
+                <div class="info-box carousel-box">
+                    <!-- CAROUSEL EFFECT TECHNOLOGY HERE (Vide) -->
+                </div>
+            </div>
+        </div>
+        <div class="portfolio-row row-2">
+            <div class="info-box section-box" onclick="openModal('formationsModal')">
+                <h2>Formations</h2>
+            </div>
+            <div class="info-box section-box" onclick="openModal('projectsModal')">
+                <h2>Projects</h2>
+            </div>
+        </div>
+        <div class="portfolio-row row-3">
+            <div class="portfolio-col col-3">
+                <div class="social-box" onclick="openModal('socialModal1')">
+                    <p>Social Network 1</p>
+                </div>
+                <div class="social-box" onclick="openModal('socialModal2')">
+                    <p>Social Network 2</p>
+                </div>
+                <div class="social-box" onclick="openModal('socialModal3')">
+                    <p>Social Network 3</p>
+                </div>
+            </div>
+            <div class="portfolio-col col-3">
+                <div class="social-box" onclick="openModal('socialModal4')">
+                    <p>Social Network 4</p>
+                </div>
+                <div class="social-box" onclick="openModal('socialModal5')">
+                    <p>Social Network 5</p> 
+                </div>
+                <div class="social-box" onclick="openModal('socialModal6')">
+                    <p>Social Network 6</p>
+                </div>
+            </div>
+            <div class="info2-box image-box" onclick="openModal('imageModal')">
+                <p>Image</p>
+            </div>
+            <div class="info-box toggle-box">
+                <label class="switch">
+                    <input type="checkbox">
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <div id="helloModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('helloModal')">&times;</span>
+            <h2>Edit Hello</h2>
+            <form action="/submit-hello" method="POST">
+                <div class="input-group">
+                    <label for="hello-name">Name:</label>
+                    <input type="text" id="hello-name" name="hello-name" placeholder="Your Name" required>
+                </div>
+                <div class="input-group">
+                    <label for="hello-description">Description:</label>
+                    <textarea id="hello-description" name="hello-description" rows="4" required>Write your description here.</textarea>
+                </div>
+                <button type="submit">Save</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="imageModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('imageModal')">&times;</span>
+            <h2>Upload Image</h2>
+            <form action="/upload-image" method="POST" enctype="multipart/form-data">
+                <div class="input-group">
+                    <label for="image-upload">Choose an image:</label>
+                    <input type="file" id="image-upload" name="image-upload" accept="image/*" required>
+                </div>
+                <button type="submit">Upload</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="profileImageModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('profileImageModal')">&times;</span>
+            <h2>Upload Profile Picture</h2>
+            <form action="/upload-profile-image" method="POST" enctype="multipart/form-data">
+                <div class="input-group">
+                    <label for="profile-image-upload">Choose a profile picture:</label>
+                    <input type="file" id="profile-image-upload" name="profile-image-upload" accept="image/*" required>
+                </div>
+                <button type="submit">Upload</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="aboutModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('aboutModal')">&times;</span>
+            <h2>Edit About Me</h2>
+            <form action="/submit-about" method="POST">
+                <div class="input-group">
+                    <label for="about-me">About Me:</label>
+                    <textarea id="about-me" name="about-me" rows="4" required>A brief description of your background or interests.</textarea>
+                </div>
+                <button type="submit">Save</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="formationsModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('formationsModal')">&times;</span>
+            <h2>Manage Formations</h2>
+            <button onclick="openModal('addFormationModal')">Add Formation</button>
+            <div id="formationsList">
+                <h3>Your Formations</h3>
+                <!-- Example Formation -->
+                <div class="formation-item">
+                    <h4>Formation Title</h4>
+                    <p>Description of the formation.</p>
+                    <p>Year: 2024</p>
+                    <p>Link: <a href="https://example.com">View Project</a></p>
+                    <button onclick="openModal('editFormationModal')">Edit</button>
+                    <button onclick="deleteFormation()">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="addFormationModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('addFormationModal')">&times;</span>
+            <h2>Add Formation</h2>
+            <form action="/submit-formation" method="POST" enctype="multipart/form-data">
+                <div class="input-group">
+                    <label for="formation-title">Title:</label>
+                    <input type="text" id="formation-title" name="formation-title" required>
+                </div>
+                <div class="input-group">
+                    <label for="formation-description">Description:</label>
+                    <textarea id="formation-description" name="formation-description" rows="4" required></textarea>
+                </div>
+                <div class="input-group">
+                    <label for="formation-year">Year:</label>
+                    <input type="text" id="formation-year" name="formation-year" required>
+                </div>
+                <div class="input-group">
+                    <label for="formation-link">Project Link:</label>
+                    <input type="url" id="formation-link" name="formation-link" required>
+                </div>
+                <div class="input-group">
+                    <label for="formation-image">Image:</label>
+                    <input type="file" id="formation-image" name="formation-image" accept="image/*">
+                </div>
+                <button type="submit">Add Formation</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="projectsModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('projectsModal')">&times;</span>
+            <h2>Manage Projects</h2>
+            <button onclick="openModal('addProjectModal')">Add Project</button>
+            <div id="projectsList">
+                <h3>Your Projects</h3>
+                <!-- Example Project -->
+                <div class="project-item">
+                    <h4>Project Title</h4>
+                    <p>Description of the project.</p>
+                    <p>Year: 2024</p>
+                    <p>Link: <a href="https://example.com">View Project</a></p>
+                    <button onclick="openModal('editProjectModal')">Edit</button>
+                    <button onclick="deleteProject()">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="addProjectModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('addProjectModal')">&times;</span>
+            <h2>Add Project</h2>
+            <form action="/submit-project" method="POST" enctype="multipart/form-data">
+                <div class="input-group">
+                    <label for="project-title">Title:</label>
+                    <input type="text" id="project-title" name="project-title" required>
+                </div>
+                <div class="input-group">
+                    <label for="project-description">Description:</label>
+                    <textarea id="project-description" name="project-description" rows="4" required></textarea>
+                </div>
+                <div class="input-group">
+                    <label for="project-year">Year:</label>
+                    <input type="text" id="project-year" name="project-year" required>
+                </div>
+                <div class="input-group">
+                    <label for="project-link">Project Link:</label>
+                    <input type="url" id="project-link" name="project-link" required>
+                </div>
+                <div class="input-group">
+                    <label for="project-image">Image:</label>
+                    <input type="file" id="project-image" name="project-image" accept="image/*">
+                </div>
+                <button type="submit">Add Project</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="socialModal1" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('socialModal1')">&times;</span>
+            <h2>Edit Social Network 1</h2>
+            <form action="/submit-social1" method="POST" enctype="multipart/form-data">
+                <div class="input-group">
+                    <label for="social-name-1">Network Name:</label>
+                    <input type="text" id="social-name-1" name="social-name-1" placeholder="Enter Network Name" required>
+                </div>
+                <div class="input-group">
+                    <label for="social-image-1">Upload Image:</label>
+                    <input type="file" id="social-image-1" name="social-image-1" accept="image/*" required>
+                </div>
+                <div class="input-group">
+                    <label for="social-url-1">Network URL:</label>
+                    <input type="url" id="social-url-1" name="social-url-1" placeholder="Enter Network URL" required>
+                </div>
+                <button type="submit">Save</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="socialModal2" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('socialModal2')">&times;</span>
+            <h2>Edit Social Network 2</h2>
+            <form action="/submit-social2" method="POST" enctype="multipart/form-data">
+                <div class="input-group">
+                    <label for="social-name-2">Network Name:</label>
+                    <input type="text" id="social-name-2" name="social-name-2" placeholder="Enter Network Name" required>
+                </div>
+                <div class="input-group">
+                    <label for="social-image-2">Upload Image:</label>
+                    <input type="file" id="social-image-2" name="social-image-2" accept="image/*" required>
+                </div>
+                <div class="input-group">
+                    <label for="social-url-2">Network URL:</label>
+                    <input type="url" id="social-url-2" name="social-url-2" placeholder="Enter Network URL" required>
+                </div>
+                <button type="submit">Save</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="socialModal3" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('socialModal3')">&times;</span>
+            <h2>Edit Social Network 3</h2>
+            <form action="/submit-social3" method="POST" enctype="multipart/form-data">
+                <div class="input-group">
+                    <label for="social-name-3">Network Name:</label>
+                    <input type="text" id="social-name-3" name="social-name-3" placeholder="Enter Network Name" required>
+                </div>
+                <div class="input-group">
+                    <label for="social-image-3">Upload Image:</label>
+                    <input type="file" id="social-image-3" name="social-image-3" accept="image/*" required>
+                </div>
+                <div class="input-group">
+                    <label for="social-url-3">Network URL:</label>
+                    <input type="url" id="social-url-3" name="social-url-3" placeholder="Enter Network URL" required>
+                </div>
+                <button type="submit">Save</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="socialModal4" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('socialModal4')">&times;</span>
+            <h2>Edit Social Network 4</h2>
+            <form action="/submit-social4" method="POST" enctype="multipart/form-data">
+                <div class="input-group">
+                    <label for="social-name-4">Network Name:</label>
+                    <input type="text" id="social-name-4" name="social-name-4" placeholder="Enter Network Name" required>
+                </div>
+                <div class="input-group">
+                    <label for="social-image-4">Upload Image:</label>
+                    <input type="file" id="social-image-4" name="social-image-4" accept="image/*" required>
+                </div>
+                <div class="input-group">
+                    <label for="social-url-4">Network URL:</label>
+                    <input type="url" id="social-url-4" name="social-url-4" placeholder="Enter Network URL" required>
+                </div>
+                <button type="submit">Save</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="socialModal5" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('socialModal5')">&times;</span>
+            <h2>Edit Social Network 5</h2>
+            <form action="/submit-social5" method="POST" enctype="multipart/form-data">
+                <div class="input-group">
+                    <label for="social-name-5">Network Name:</label>
+                    <input type="text" id="social-name-5" name="social-name-5" placeholder="Enter Network Name" required>
+                </div>
+                <div class="input-group">
+                    <label for="social-image-5">Upload Image:</label>
+                    <input type="file" id="social-image-5" name="social-image-5" accept="image/*" required>
+                </div>
+                <div class="input-group">
+                    <label for="social-url-5">Network URL:</label>
+                    <input type="url" id="social-url-5" name="social-url-5" placeholder="Enter Network URL" required>
+                </div>
+                <button type="submit">Save</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="socialModal6" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('socialModal6')">&times;</span>
+            <h2>Edit Social Network 6</h2>
+            <form action="/submit-social6" method="POST" enctype="multipart/form-data">
+                <div class="input-group">
+                    <label for="social-name-6">Network Name:</label>
+                    <input type="text" id="social-name-6" name="social-name-6" placeholder="Enter Network Name" required>
+                </div>
+                <div class="input-group">
+                    <label for="social-image-6">Upload Image:</label>
+                    <input type="file" id="social-image-6" name="social-image-6" accept="image/*" required>
+                </div>
+                <div class="input-group">
+                    <label for="social-url-6">Network URL:</label>
+                    <input type="url" id="social-url-6" name="social-url-6" placeholder="Enter Network URL" required>
+                </div>
+                <button type="submit">Save</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = "block";
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = "none";
+        }
+
+        window.onclick = function(event) {
+            const modals = document.getElementsByClassName("modal");
+            for (let i = 0; i < modals.length; i++) {
+                if (event.target == modals[i]) {
+                    modals[i].style.display = "none";
+                }
+            }
+        }
+        
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'block';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        function deleteFormation() {
+            // Logic to delete a formation (to be implemented)
+            alert('Formation deleted!');
+        }
+
+        function deleteProject() {
+            // Logic to delete a project (to be implemented)
+            alert('Project deleted!');
+        }
+    </script>
+</body>
+</html>

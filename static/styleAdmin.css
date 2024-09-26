@@ -1,0 +1,510 @@
+:root {
+    --text-color: rgb(248, 248, 248);
+    --bio-color: rgb(240, 240, 240);
+    --highlight-color: rgba(255, 255, 255, 0.4);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-image: url(../static/bg.jpg);
+    background-size: cover;
+    background-position: center;
+    font-family: 'Poppins', sans-serif;
+}
+
+.portfolio-container {
+    width: 90vw;
+    height: 90vh;
+    border-radius: 1em;
+    padding: 2em;
+    display: flex;
+    gap: 1em;
+    flex-wrap: wrap;
+}
+
+.portfolio-row {
+    border-radius: 1em;
+    display: flex;
+    gap: 1em;
+    flex: 1;
+}
+
+.row-1 {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    flex: 7;
+}
+
+.row-2 {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    flex: 2;
+}
+
+.row-3 {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    flex: 0;
+}
+
+.portfolio-col {
+    flex: 1;
+    display: flex;
+    gap: 1em;
+    border-radius: 1em;
+}
+
+.col-1 {
+    flex-direction: row;
+}
+
+.col-2 {
+    flex-direction: row;
+}
+
+.col-3 {
+    flex-direction: row;
+}
+
+/* Styles de base de l'info-box */
+.info-box {
+    flex: 1;
+    border-radius: 1em;
+    background-color: rgba(255, 255, 255, 0.2);
+    border: 2px solid #ffffff10;
+    backdrop-filter: blur(50px);
+    transition: transform 0.3s ease-in-out, border 0.3s ease-in-out;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1em;
+    text-align: center;
+    position: relative;  
+    overflow: hidden;    
+}
+
+
+.info-box:hover {
+    transform: scale(1.03);
+    border: 1.5px solid #ffffff50;
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+.info2-box {
+    flex: 4;
+    border-radius: 1em;
+    background-color: rgba(255, 255, 255, 0.2);
+    border: 2px solid #ffffff10;
+    backdrop-filter: blur(50px);
+    transition: transform 0.3s ease-in-out, border 0.3s ease-in-out;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1em;
+    text-align: center;
+    position: relative;  
+    overflow: hidden;    
+}
+
+
+.info2-box:hover {
+    background-color: rgba(30, 30, 30, 0.8); /* Fond gris/noir au hover */
+    color: white; /* Change la couleur du texte */
+    background-image: url('../static/pen.png'); /* Chemin de l'icône */
+    background-repeat: no-repeat; /* Pas de répétition de l'image */
+    background-position: center; /* Centre l'image */
+    background-size: 25%;
+}
+
+.info-box:hover {
+    background-color: rgba(30, 30, 30, 0.8); /* Fond gris/noir au hover */
+    color: white; /* Change la couleur du texte */
+    background-image: url('../static/pen.png'); /* Chemin de l'icône */
+    background-repeat: no-repeat; /* Pas de répétition de l'image */
+    background-position: center; /* Centre l'image */
+    background-size: 25%;
+}
+
+
+.achievements-box {
+    flex: 2.5;
+}
+
+.profile-box {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.image-box {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.image-box img.profile-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.bio-box {
+    display: flex;
+    flex: 2.7;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 0.5em;
+    padding: 1em;
+    width: 100%; 
+    box-sizing: border-box; 
+}
+
+.bio-box h5 {
+    font-size: 1.5em;
+    color: var(--text-color); /* Utilise la variable pour la couleur */
+    margin: 0;
+    text-align: left;
+    width: 100%;
+}
+
+.greeting {
+    font-size: 1.5em;
+    color: var(--text-color); /* Utilise la variable pour la couleur */
+    text-shadow:
+        0 0 15px var(--highlight-color),
+        0 0 20px var(--highlight-color),
+        0 0 25px var(--highlight-color);
+}
+
+.bio-box p {
+    font-size: 1em;
+    color: var(--bio-color); /* Utilise la variable pour la couleur */
+    margin: 0;
+    text-align: left;
+    width: 100%;
+}
+
+.social-box {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    padding: 10px;
+    transition: background-color 0.3s;
+    backdrop-filter: blur(50px);
+}
+
+.toggle-box {
+    pointer-events: none;
+}
+
+.social-box:hover {
+    background-color: rgba(30, 30, 30, 0.8); /* Fond gris/noir au hover */
+    color: white; /* Change la couleur du texte */
+    background-image: url('../static/pen.png'); /* Chemin de l'icône */
+    background-repeat: no-repeat; /* Pas de répétition de l'image */
+    background-position: center; /* Centre l'image */
+    background-size: 25%;
+}
+
+.social-box img {
+    width: 50px;
+    height: auto;
+    filter: invert(100%);
+}
+
+.profile-image {
+    position: absolute;
+    top: -15%;               
+    left: -25%;              
+    width: 200px;           
+    height: auto;           
+    aspect-ratio: 1/1;     
+    object-fit: cover;      
+    z-index: 2;             
+    transition: transform 0.3s ease-in-out;  
+}
+
+.profile-image:hover {
+    transform: scale(1.1) rotate3d(1, 0.5, 0, 5deg);
+}
+
+.carousel-box {
+    flex-direction: column;
+    text-align: left;
+    z-index: 1;  
+}
+
+h2 {
+    text-transform: uppercase;
+    font-weight: 900;
+    color: var(--text-color); /* Utilise la variable pour la couleur */
+}
+
+p {
+    font-size: 1em;
+    color: var(--text-color); /* Utilise la variable pour la couleur */
+}
+
+.section-link {
+    text-decoration: none;
+    color: var(--text-color); /* Utilise la variable pour la couleur */
+    margin-bottom: 1.5rem;
+}
+
+.section-link h2 {
+    font-size: 2em;
+    color: var(--text-color); /* Utilise la variable pour la couleur */
+}
+
+/* Switch styles */
+.switch {
+    display: block;
+    --width-of-switch: 3.5em;
+    --height-of-switch: 2em;
+    --size-of-icon: 1.4em;
+    --slider-offset: 0.3em;
+    position: relative;
+    width: var(--width-of-switch);
+    height: var(--height-of-switch);
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #cacaca;
+    transition: .4s;
+    border-radius: 30px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: var(--size-of-icon, 1.4em);
+    width: var(--size-of-icon, 1.4em);
+    border-radius: 20px;
+    left: var(--slider-offset, 0.3em);
+    top: 50%;
+    transform: translateY(-50%);
+    background: linear-gradient(40deg, #e5ff00, #ff8c00 60%);
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: #303136;
+}
+
+input:checked + .slider:before {
+    left: calc(100% - (var(--size-of-icon, 1.4em) + var(--slider-offset, 0.3em)));
+    background: #303136;
+    box-shadow: inset -3px -2px 5px -2px #2d2b60, inset -10px -4px 0 0 #a3dafb;
+}
+
+/* Style pour masquer le pop-up par dÃ©faut */
+.popup {
+    display: block;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 20px;
+    border: 2px solid #333;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 10;
+}
+
+/* Fond sombre */
+.overlay {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 9;
+}
+
+/* Bouton pour ouvrir le formulaire */
+.open-btn {
+    margin: 20px;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+/* Bouton pour fermer le formulaire */
+.close-btn {
+    display: block;
+    margin-top: 20px;
+    padding: 10px;
+    background-color: red;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+
+.arrow-icon {
+    width: 24px;
+    height: auto;
+    transform: rotate(-45deg) scale(0.8);
+}
+
+.round-button:hover {
+    background-color: rgba(255, 255, 255, 1);
+}
+
+/* Modal Styles */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0, 0, 0); /* Fallback color */
+    background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+    padding-top: 60px; /* Location of the box */
+}
+
+.modal-content {
+    background-color: #fefefe; /* White background */
+    margin: 5% auto; /* 15% from the top and centered */
+    padding: 20px; /* Some padding */
+    border: 1px solid #888; /* Gray border */
+    width: 80%; /* Could be more or less, depending on screen size */
+}
+
+.close {
+    color: #aaa; /* Gray color */
+    float: right; /* Align to the right */
+    font-size: 28px; /* Large font */
+    font-weight: bold; /* Bold font */
+}
+
+.close:hover,
+.close:focus {
+    color: black; /* Change color on hover/focus */
+    text-decoration: none; /* Remove underline */
+    cursor: pointer; /* Pointer cursor on hover */
+}
+
+.input-group {
+    margin-bottom: 1.5rem; /* Spacing below each group */
+    text-align: left; /* Align text to the left */
+}
+
+.input-group label {
+    display: block; /* Block display */
+    margin-bottom: 0.5rem; /* Space below label */
+    font-weight: bold; /* Bold font */
+    color: #555; /* Dark gray color */
+}
+
+.input-group input,
+.input-group textarea {
+    width: calc(90% - 1.5rem); /* Responsive width */
+    max-width: 90%; /* Maximum width */
+    padding: 0.75rem; /* Padding inside input */
+    border: 1px solid #ddd; /* Light gray border */
+    border-radius: 0.25rem; /* Rounded corners */
+}
+
+.input-group button {
+    padding: 0.75rem; /* Padding inside button */
+    border: none; /* No border */
+    border-radius: 0.25rem; /* Rounded corners */
+    background: #ff7e5f; /* Background color */
+    color: white; /* White text */
+    font-size: 1rem; /* Font size */
+    cursor: pointer; /* Pointer cursor */
+    transition: background 0.3s ease; /* Smooth transition for hover */
+}
+
+.input-group button:hover {
+    background: #feb47b; /* Change background on hover */
+}
+
+/* Styles for formation and project items */
+.formation-item,
+.project-item {
+    border: 1px solid #ccc; /* Light gray border */
+    padding: 10px; /* Padding inside item */
+    margin: 10px 0; /* Spacing above and below item */
+}
+
+
+
+@media(max-width: 1024px) {
+    .portfolio-container {
+        flex-direction: column;
+    }
+
+    .row-1 {
+        flex-direction: row;
+    }
+    
+    .row-2 {
+        flex-direction: row;
+    }
+    
+    .row-3 {
+        flex-direction: row;
+    }
+
+    .portfolio-col {
+        flex: 2;
+        flex-direction: column;
+    }
+}
+
+@media(max-width: 650px) {
+    .portfolio-container {
+        max-width: 900px;
+        max-height: 550px;
+        gap: 0.5em;
+    }
+
+    .portfolio-row {
+        gap: 0.5em;
+    }
+
+    .portfolio-col {
+        gap: 0.5em;
+    }
+}

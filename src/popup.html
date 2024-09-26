@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pop-up Formulaire</title>
+    <link rel="stylesheet" href="../static/popup.css"> <!-- Lien vers le fichier CSS -->
+</head>
+<body>
+    <button class="open-btn" onclick="openPopup()">Ouvrir le formulaire</button>
+
+    <!-- Fond sombre -->
+    <div class="overlay" id="overlay"></div>
+
+    <!-- Formulaire pop-up -->
+    <div class="popup" id="popup">
+        <h2>Formulaire</h2>
+        <form action="/admin" method="post">
+            <label for="username">username</label><br>
+            <input type="username" id="username" name="username" required><br><br>
+            <label for="password">Mot de passe</label><br>
+            <input type="password" id="password" name="password" required><br><br>
+            <button class="connexion" type="submit">Se connecter</button><br><br>
+        </form>
+
+        <!-- Bouton pour fermer le formulaire -->
+        <button class="close-btn" onclick="closePopup()">Fermer</button>
+    </div>
+
+    <script src="../static/admin.js"></script>
+     <!-- Lien vers le fichier JavaScript -->
+     <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const error = getCookie("error");
+            if (error) {
+                alert(error);
+                document.cookie = "error=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+            }
+        });
+
+        function getCookie(name) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
+        }
+    </script>

@@ -84,6 +84,7 @@ func main() {
 	http.Handle("/logout", &logoutHandler{})
 	http.Handle("/profil", &profilHandler{})
 	http.Handle("/profilOther", &profilOtherHandler{})
+	http.Handle("/admin", &adminHandler{})
 
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static/"))))
 	http.Handle("/src/", http.StripPrefix("/src/", http.FileServer(http.Dir("src/"))))
@@ -571,4 +572,56 @@ func (h *profilOtherHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
     }
 
     renderTemplate(w, "./src/profilOther.html", user)
+}
+
+type adminHandler struct{}
+
+func (h *adminHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+    if r.Method == http.MethodGet {
+        renderTemplate(w, "./src/admin.html", nil)
+        return
+    }
+    if r.Method == http.MethodPost {
+        if err := r.ParseForm(); err != nil {
+            http.Error(w, "Erreur lors de la lecture du formulaire", http.StatusBadRequest)
+            return
+        }
+        username := r.FormValue("username")
+        password := r.FormValue("password")
+        if password == "" {
+            setErrorCookie(w, "Username ou mot de passe vide")
+            http.Redirect(w, r, "/admin", http.StatusSeeOther)
+            return
+        }
+        var dbPassword string
+        err := db.QueryRow("SELECT password FROM utilisateurs WHERE username = ?", username).Scan(&dbPassword)
+        if err != nil {
+            if err == sql.ErrNoRows {
+                setErrorCookie(w, "Username ou mot de passe incorrect")
+                http.Redirect(w, r, "/admin", http.StatusSeeOther)
+                return
+            }
+            setErrorCookie(w, "Erreur lors de la vérification de l'utilisateur")
+            http.Redirect(w, r, "/admin", http.StatusSeeOther)
+            log.Println("Erreur lors de la vérification de l'utilisateur:", err)
+            return
+        }
+        if password != dbPassword {
+            setErrorCookie(w, "Mot de passe incorrect")
+            http.Redirect(w, r, "/admin", http.StatusSeeOther)
+            return
+        }
+        // Créer une session
+        sessionID := uuid.New().String()
+        sessions[sessionID] = username
+        cookie := &http.Cookie{
+            Name:  "session_id",
+            Value: sessionID,
+            Path:  "/",
+        }
+        http.SetCookie(w, cookie)
+        http.Redirect(w, r, "/admin", http.StatusSeeOther)
+        return
+    }
+    http.NotFound(w, r)
 }
