@@ -15,7 +15,7 @@
     <!-- Formulaire pop-up -->
     <div class="popup" id="popup">
         <h2>Formulaire</h2>
-        <form action="/admin" method="post">
+        <form action="/popup" method="post">
             <label for="username">username</label><br>
             <input type="username" id="username" name="username" required><br><br>
             <label for="password">Mot de passe</label><br>
@@ -27,7 +27,7 @@
         <button class="close-btn" onclick="closePopup()">Fermer</button>
     </div>
 
-    <script src="../static/admin.js"></script>
+    <script src="../static/popup.js"></script>
      <!-- Lien vers le fichier JavaScript -->
      <script>
         document.addEventListener("DOMContentLoaded", function() {
@@ -44,3 +44,4 @@
             if (parts.length === 2) return parts.pop().split(';').shift();
         }
     </script>
+</body>

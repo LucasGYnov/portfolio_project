@@ -82,8 +82,7 @@ func main() {
 	http.Handle("/details/", &postDetailHandler{})
 	http.Handle("/erreur", &errorHandler{})
 	http.Handle("/logout", &logoutHandler{})
-	http.Handle("/profil", &profilHandler{})
-	http.Handle("/profilOther", &profilOtherHandler{})
+	http.Handle("/popup", &popupHandler{})
 	http.Handle("/admin", &adminHandler{})
 
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static/"))))
@@ -524,61 +523,11 @@ func (h *errorHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	renderTemplate(w, "./src/erreur.html", nil)
 }
 
-type profilHandler struct{}
+type popupHandler struct{}
 
-func (h *profilHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	// Check if user is logged in
-	sessionCookie, err := r.Cookie("session_id")
-	if err != nil {
-		http.Redirect(w, r, "/login", http.StatusSeeOther)
-		return
-	}
-	username, ok := sessions[sessionCookie.Value]
-	if !ok {
-		http.Redirect(w, r, "/login", http.StatusSeeOther)
-		return
-	}
-
-	var user User
-	err = db.QueryRow("SELECT id, username FROM utilisateurs WHERE username = ?", username).Scan(&user.ID, &user.Username)
-	if err != nil {
-		http.Error(w, "Erreur lors de la récupération des informations de l'utilisateur", http.StatusInternalServerError)
-		log.Println("Erreur lors de la récupération des informations de l'utilisateur:", err)
-		return
-	}
-
-	renderTemplate(w, "./src/profil.html", user)
-}
-
-type profilOtherHandler struct{}
-
-func (h *profilOtherHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-    username := r.URL.Query().Get("username")
-    if username == "" {
-        http.Error(w, "Nom d'utilisateur manquant", http.StatusBadRequest)
-        return
-    }
-
-    var user User
-    err := db.QueryRow("SELECT id, username FROM utilisateurs WHERE username = ?", username).Scan(&user.ID, &user.Username)
-    if err != nil {
-        if err == sql.ErrNoRows {
-            http.Error(w, "Utilisateur non trouvé", http.StatusNotFound)
-            return
-        }
-        http.Error(w, "Erreur lors de la récupération de l'utilisateur", http.StatusInternalServerError)
-        log.Println("Erreur lors de la récupération de l'utilisateur:", err)
-        return
-    }
-
-    renderTemplate(w, "./src/profilOther.html", user)
-}
-
-type adminHandler struct{}
-
-func (h *adminHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (h *popupHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
     if r.Method == http.MethodGet {
-        renderTemplate(w, "./src/admin.html", nil)
+        renderTemplate(w, "./src/popup.html", nil)
         return
     }
     if r.Method == http.MethodPost {
@@ -590,7 +539,7 @@ func (h *adminHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
         password := r.FormValue("password")
         if password == "" {
             setErrorCookie(w, "Username ou mot de passe vide")
-            http.Redirect(w, r, "/admin", http.StatusSeeOther)
+            http.Redirect(w, r, "/popup", http.StatusSeeOther)
             return
         }
         var dbPassword string
@@ -598,7 +547,7 @@ func (h *adminHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
         if err != nil {
             if err == sql.ErrNoRows {
                 setErrorCookie(w, "Username ou mot de passe incorrect")
-                http.Redirect(w, r, "/admin", http.StatusSeeOther)
+                http.Redirect(w, r, "/popup", http.StatusSeeOther)
                 return
             }
             setErrorCookie(w, "Erreur lors de la vérification de l'utilisateur")
@@ -608,7 +557,7 @@ func (h *adminHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
         }
         if password != dbPassword {
             setErrorCookie(w, "Mot de passe incorrect")
-            http.Redirect(w, r, "/admin", http.StatusSeeOther)
+            http.Redirect(w, r, "/popup", http.StatusSeeOther)
             return
         }
         // Créer une session
@@ -624,4 +573,18 @@ func (h *adminHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
         return
     }
     http.NotFound(w, r)
+}
+
+type adminHandler struct{}
+
+func (h *adminHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+    // Vérifie si une session est active
+    if cookie, err := r.Cookie("session_id"); err != nil || sessions[cookie.Value] == "" {
+        // Si aucune session valide n'existe, redirige vers la page de connexion
+        http.Redirect(w, r, "/popup", http.StatusSeeOther)
+        return
+    }
+
+    // Si la session est valide, affiche la page admin
+    renderTemplate(w, "./src/admin.html", nil)
 }
