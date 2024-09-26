@@ -23,26 +23,34 @@ func InitDB() (*sql.DB, error) {
     CREATE TABLE IF NOT EXISTS experience (
         id INTEGER PRIMARY KEY,
         title TEXT,
-        content TEXT
+        content TEXT,
+        exp_id INTEGER,
+		FOREIGN KEY (exp_id) REFERENCES utilisateurs (id)
     );
 
     CREATE TABLE IF NOT EXISTS contact (
         id INTEGER PRIMARY KEY,
-        numero TEXT,
-        email TEXT,
-        postal TEXT
+		numero TEXT,
+		email TEXT,
+		postal TEXT,
+		contact_id INTEGER,
+		FOREIGN KEY (contact_id) REFERENCES utilisateurs (id)
     );
 
     CREATE TABLE IF NOT EXISTS formation (
         id INTEGER PRIMARY KEY,
-        title TEXT,
-        years TEXT
+		title TEXT,
+		years TEXT,
+		formation_id INTEGER,
+		FOREIGN KEY (formation_id) REFERENCES utilisateurs (id)
     );
 
     CREATE TABLE IF NOT EXISTS tech (
         id INTEGER PRIMARY KEY,
-        title TEXT,
-        content TEXT
+		title TEXT,
+		content TEXT,
+		tech_id INTEGER,
+		FOREIGN KEY (tech_id) REFERENCES utilisateurs (id)
     );
 
     `
