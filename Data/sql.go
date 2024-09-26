@@ -16,29 +16,34 @@ func InitDB() (*sql.DB, error) {
 	createTable := `
     CREATE TABLE IF NOT EXISTS utilisateurs (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        email TEXT NOT NULL,
         username TEXT NOT NULL,
         password TEXT NOT NULL
     );
 
-    CREATE TABLE IF NOT EXISTS posts (
+    CREATE TABLE IF NOT EXISTS experience (
         id INTEGER PRIMARY KEY,
-        title TEXT NOT NULL,
-        content TEXT NOT NULL,
-        video   BLOB,
-        image   BLOB,
-        user_id INTEGER,
-        post_id INTEGER,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    );
-
-    CREATE TABLE IF NOT EXISTS comments (
-        id INTEGER PRIMARY KEY,
-        post_id INTEGER,
-        user_id INTEGER,
+        title TEXT,
         content TEXT
     );
 
+    CREATE TABLE IF NOT EXISTS contact (
+        id INTEGER PRIMARY KEY,
+        numero TEXT,
+        email TEXT,
+        postal TEXT
+    );
+
+    CREATE TABLE IF NOT EXISTS formation (
+        id INTEGER PRIMARY KEY,
+        title TEXT,
+        years TEXT
+    );
+
+    CREATE TABLE IF NOT EXISTS tech (
+        id INTEGER PRIMARY KEY,
+        title TEXT,
+        content TEXT
+    );
 
     `
 	_, err = db.Exec(createTable)

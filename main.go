@@ -128,7 +128,7 @@ func (h *mainPageHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		}
 		defer rows.Close()
 
-		renderTemplate(w, "./src/Main_page.html", data)
+		renderTemplate(w, "./src/index.html", data)
 		return
 	}
 	if r.Method == http.MethodPost {
