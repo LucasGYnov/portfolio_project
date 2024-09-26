@@ -1,94 +1,98 @@
-<!DOCTYPE html>
-<html lang="en">
-   <head>
-      <meta charset="UTF-8" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <meta name="copyright" content="Copyright owner" />
-      <!-- Favicon -->
-      <link rel="icon" href="" type="image/x-icon">
-      <!-- Feuilles de style -->
-      <link rel="stylesheet" href="css/style.css">
-      <!-- Polices Google --> 
-      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins">
-      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rubik+Mono+One&display=swap">
-      <title>Portfolio Menu Page</title>
-   </head>
-   <body>
-      <div class="container">
-         <div class="row row-1">
-            <div class="col col-1">
-               <div class="box c2">
-                  <h5>Hello, I'm John Cena</h5>
-                  <p>I'm an American actor, wrestler and rapper. Currently with World Wrestling Entertainment.</p>
+   <!DOCTYPE html>
+   <html lang="en">
+      <head>
+         <meta charset="UTF-8" />
+         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+         <meta name="copyright" content="Copyright owner" />
+         <!-- Favicon -->
+         <link rel="icon" href="" type="image/x-icon">
+         <!-- Stylesheet -->
+         <link rel="stylesheet" href="css/style.css">
+         <!-- Google Fonts --> 
+         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins">
+         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rubik+Mono+One&display=swap">
+         <title>Portfolio Menu Page</title>
+      </head>
+      <body>
+         <div class="portfolio-container">
+            <div class="portfolio-row row-1">
+               <div class="portfolio-col col-1">
+                  <div class="info-box bio-box">
+                     <h5 class="greeting">Hello, I'm John Cena</h5>
+                     <p>I'm an American actor, wrestler, and rapper. Currently with World Wrestling Entertainment.</p>
+                  </div>
+                  <div class="info-box image-box">
+                     <img src="assets/img_1.jpg" alt="My profile picture" class="profile-image">
+                  </div>
                </div>
-               <div class="box c1">
-                  <img src="assets/img_1.jpg" alt="My profile picture" class="profile-picture">
+               <div class="portfolio-col col-1">
+                  <div class="info-box image-box">
+                     <img src="assets/profile.jpg" alt="My profile picture" class="profile-image">
+                  </div>
+                  <div class="info-box bio-box">
+                     <h5>About Me</h5>
+                     <p>I began my professional wrestling career in 1999 in the independent Ultimate Pro Wrestling (UPW) federation, where I won the UPW World Heavyweight Championship in 2008.</p>
+                  </div>
+               </div>
+               <div class="portfolio-col col-2">
+                  <div class="info-box carousel-box">
+                     <!-- CAROUSEL EFFECT TECHNOLOGY HERE -->
+                  </div>
                </div>
             </div>
-            <div class="col col-1">
-               <div class="box c1">
-                  <img src="assets/img_glace.jfif" alt="My profile picture" class="profile-picture">
+            <div class="portfolio-row row-2">
+               <div class="info-box section-box">
+                  <a href="formations.html" class="section-link">
+                     <img src="assets/formation.png" alt="Formations" width="128px">
+                     <h2>Formations</h2>
+                  </a>
+                  <a href="formations.html" class="round-button">
+                     <img src="assets/arrow.png" alt="Go to Formations" class="arrow-icon">
+                  </a>
                </div>
-               <div class="box c2">
-                  <h5>About me</h5>
-                  <p>I began my professional wrestling career in 1999 in the independent Ultimate Pro Wrestling (UPW) federation, where I won the UPW World Heavyweight Championship in 2008.</p>
+               <div class="info-box section-box">
+                  <a href="formation.png" class="section-link">
+                     <img src="assets/project1.png" alt="Projects" width="128px">
+                     <h2>Projects</h2>
+                  </a>
+                  <a href="formations.html" class="round-button">
+                     <img src="assets/arrow.png" alt="Go to Formations" class="arrow-icon">
+                  </a>
                </div>
             </div>
-            <div class="col col-2">
-               <div class="box text-box">
-                  <!-- CARROUSEL EFFECT TECHNO WE USE -->
+            <div class="portfolio-row row-3">
+               <div class="portfolio-col col-3">
+                  <div class="social-box">
+                     <img src="assets/social_Network/linkedin.png" alt="LinkedIn" width="50px">
+                  </div>
+                  <div class="social-box">
+                     <img src="assets/social_Network/github.png" alt="GitHub" width="50px">
+                  </div>
+                  <div class="social-box">
+                     <img src="assets/social_Network/enveloppe.png" alt="Email" width="50px">
+                  </div>
+               </div>
+               <div class="portfolio-col col-3">
+                  <div class="social-box">
+                     <img src="assets/social_Network/instagram.png" alt="Instagram" width="50px">
+                  </div>
+                  <div class="social-box">
+                     <img src="assets/social_Network/twitter.png" alt="Twitter" width="50px">
+                  </div>
+                  <div class="social-box">
+                     <img src="assets/social_Network/behance.png" alt="Behance" width="50px">
+                  </div>
+               </div>
+               <div class="info2-box image-box">
+                  <img src="assets/bg.png" alt="My profile picture" class="profile-image">
+               </div>
+               <div class="info-box toggle-box">
+                  <label class="switch">
+                     <input type="checkbox">
+                     <span class="slider"></span>
+                  </label>
                </div>
             </div>
          </div>
-         <div class="row row-2">
-            <div class="box">
-               <a href="formations.html" class="section-link">
-                  <img src="assets/formation.png" alt="Formations" width="128px">
-                  <h2>Formations</h2>
-               </a>
-            </div>
-            <div class="box">
-               <a href="formation.png" class="section-link">
-                  <img src="assets/project1.png" alt="Projets" width="128px">
-                  <h2>Projets</h2>
-               </a>
-            </div>
-         </div>
-         <div class="row row-3">
-            <div class="col col-3">
-               <div class="box c3">
-                  <img src="assets/social_Network/linkedin.png" alt="LinkedIn" width="50px">
-               </div>
-               <div class="box c3">
-                  <img src="assets/social_Network/github.png" alt="GitHub" width="50px">
-               </div>
-               <div class="box c3">
-                  <img src="assets/social_Network/enveloppe.png" alt="Email" width="50px">
-               </div>
-            </div>
-            <div class="col col-3">
-               <div class="box c3">
-                  <img src="assets/social_Network/instagram.png" alt="Instagram" width="50px">
-               </div>
-               <div class="box c3">
-                  <img src="assets/social_Network/twitter.png" alt="Twitter" width="50px">
-               </div>
-               <div class="box c3">
-                  <img src="assets/social_Network/behance.png" alt="Behance" width="50px">
-               </div>
-            </div>
-            <div class="box boxMid">
-               <a href="achievements.html" class="section-link">
-                  <h2>Réalisations</h2>
-               </a>
-            </div>
-            <div class="box">
-               <label class="switch">
-               <input type="checkbox">
-               <span class="slider"></span>
-               </label>
-            </div>
-         </div>
-      </div>
-   </body>
-</html>
+      </body>
+   </html>

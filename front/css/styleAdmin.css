@@ -78,6 +78,7 @@ body {
     flex-direction: row;
 }
 
+/* Styles de base de l'info-box */
 .info-box {
     flex: 1;
     border-radius: 1em;
@@ -119,11 +120,27 @@ body {
 
 
 .info2-box:hover {
-    transform: scale(1.03);
-    border: 1.5px solid #ffffff50;
-    background-color: rgba(255, 255, 255, 0.3);
+    background-color: rgba(30, 30, 30, 0.8); /* Fond gris/noir au hover */
+    color: white; /* Change la couleur du texte */
+    background-image: url('../assets/pen.png'); /* Chemin de l'icône */
+    background-repeat: no-repeat; /* Pas de répétition de l'image */
+    background-position: center; /* Centre l'image */
+    background-size: 25%;
 }
 
+.info-box:hover {
+    background-color: rgba(30, 30, 30, 0.8); /* Fond gris/noir au hover */
+    color: white; /* Change la couleur du texte */
+    background-image: url('../assets/pen.png'); /* Chemin de l'icône */
+    background-repeat: no-repeat; /* Pas de répétition de l'image */
+    background-position: center; /* Centre l'image */
+    background-size: 25%;
+}
+
+
+.achievements-box {
+    flex: 2.5;
+}
 
 .profile-box {
     width: 100%;
@@ -146,7 +163,6 @@ body {
     top: 0;
     left: 0;
 }
-
 
 .bio-box {
     display: flex;
@@ -194,10 +210,20 @@ body {
     border-radius: 10px;
     padding: 10px;
     transition: background-color 0.3s;
+    backdrop-filter: blur(50px);
+}
+
+.toggle-box {
+    pointer-events: none;
 }
 
 .social-box:hover {
-    background-color: rgba(255, 255, 255, 0.5);
+    background-color: rgba(30, 30, 30, 0.8); /* Fond gris/noir au hover */
+    color: white; /* Change la couleur du texte */
+    background-image: url('../assets/pen.png'); /* Chemin de l'icône */
+    background-repeat: no-repeat; /* Pas de répétition de l'image */
+    background-position: center; /* Centre l'image */
+    background-size: 25%;
 }
 
 .social-box img {
@@ -303,21 +329,6 @@ input:checked + .slider:before {
     box-shadow: inset -3px -2px 5px -2px #2d2b60, inset -10px -4px 0 0 #a3dafb;
 }
 
-.round-button {
-    position: absolute;          
-    bottom: 10px;               
-    right: 10px;                
-    width: 35px;                
-    height: 35px;               
-    background-color: rgba(255, 255, 255, 0.5);
-    border-radius: 50%;         
-    display: flex;              
-    align-items: center;        
-    justify-content: center;    
-    text-decoration: none;       
-    transition: background-color 0.3s; 
-    border: none;
-}
 
 .arrow-icon {
     width: 24px;
@@ -328,6 +339,89 @@ input:checked + .slider:before {
 .round-button:hover {
     background-color: rgba(255, 255, 255, 1);
 }
+
+/* Modal Styles */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0, 0, 0); /* Fallback color */
+    background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+    padding-top: 60px; /* Location of the box */
+}
+
+.modal-content {
+    background-color: #fefefe; /* White background */
+    margin: 5% auto; /* 15% from the top and centered */
+    padding: 20px; /* Some padding */
+    border: 1px solid #888; /* Gray border */
+    width: 80%; /* Could be more or less, depending on screen size */
+}
+
+.close {
+    color: #aaa; /* Gray color */
+    float: right; /* Align to the right */
+    font-size: 28px; /* Large font */
+    font-weight: bold; /* Bold font */
+}
+
+.close:hover,
+.close:focus {
+    color: black; /* Change color on hover/focus */
+    text-decoration: none; /* Remove underline */
+    cursor: pointer; /* Pointer cursor on hover */
+}
+
+.input-group {
+    margin-bottom: 1.5rem; /* Spacing below each group */
+    text-align: left; /* Align text to the left */
+}
+
+.input-group label {
+    display: block; /* Block display */
+    margin-bottom: 0.5rem; /* Space below label */
+    font-weight: bold; /* Bold font */
+    color: #555; /* Dark gray color */
+}
+
+.input-group input,
+.input-group textarea {
+    width: calc(90% - 1.5rem); /* Responsive width */
+    max-width: 90%; /* Maximum width */
+    padding: 0.75rem; /* Padding inside input */
+    border: 1px solid #ddd; /* Light gray border */
+    border-radius: 0.25rem; /* Rounded corners */
+}
+
+.input-group button {
+    padding: 0.75rem; /* Padding inside button */
+    border: none; /* No border */
+    border-radius: 0.25rem; /* Rounded corners */
+    background: #ff7e5f; /* Background color */
+    color: white; /* White text */
+    font-size: 1rem; /* Font size */
+    cursor: pointer; /* Pointer cursor */
+    transition: background 0.3s ease; /* Smooth transition for hover */
+}
+
+.input-group button:hover {
+    background: #feb47b; /* Change background on hover */
+}
+
+/* Styles for formation and project items */
+.formation-item,
+.project-item {
+    border: 1px solid #ccc; /* Light gray border */
+    padding: 10px; /* Padding inside item */
+    margin: 10px 0; /* Spacing above and below item */
+}
+
+
 
 @media(max-width: 1024px) {
     .portfolio-container {
