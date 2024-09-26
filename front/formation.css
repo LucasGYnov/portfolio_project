@@ -6,23 +6,25 @@
 
 body {
     min-height: 100vh;
-    display: flex;
+    
     align-items: center;
     justify-content: center;
-    background-image: url(bg.png);
+    background-image: url(vecteezy_abstract.jpg);
     background-size: cover;
     background-position: center;
     font-family: 'Poppins', sans-serif;
 }
 
 .container {
-    width: 90vw;
-    height: 95vh;
+    width: 100%;
+    height: 100%;
     border-radius: 1em;
     padding: 2em;
     display: flex;
     gap: 1em;
     flex-wrap: wrap;
+    display:flex;
+    justify-content: center;
 }
 
 .row {
@@ -61,11 +63,15 @@ body {
 }
 
 .col-1 {
-    flex-direction: row;
+    flex-direction: column;
+    padding-right: 20em;
+    padding-left: 20em;
 }
 
 .col-2 {
-    flex-direction: row;
+    flex-direction: column;
+    padding-right: 20em;
+    padding-left: 20em;
 }
 
 .col-3 {
@@ -76,7 +82,7 @@ body {
     flex: 1;
     border-radius: 1em;
     background-color: rgba(255, 255, 255, 0.2);
-    border: 2px solid #a80d2210;
+    border: 2px solid #ffffff10;
     backdrop-filter: blur(50px);
     transition: transform 0.3s ease-in-out, border 0.3s ease-in-out;
     display: flex;
@@ -173,8 +179,9 @@ body {
 
 .text-box {
     flex-direction: column;
-    text-align: left;
+    text-align: center;
     z-index: 1;  /* Le texte reste en dessous de l'image */
+   
 }
 
 h2 {
@@ -234,4 +241,7 @@ p {
     .col {
         gap: 0.5em;
     }
+}
+h1{
+    text-align: center;
 }
