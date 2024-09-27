@@ -9,7 +9,7 @@ body {
     
     align-items: center;
     justify-content: center;
-    background-image: url(vecteezy_abstract.jpg);
+    background-image: url(../assets/vecteezy_abstract.jpg);
     background-size: cover;
     background-position: center;
     font-family: 'Poppins', sans-serif;
@@ -25,13 +25,13 @@ body {
     flex-wrap: wrap;
     display:flex;
     justify-content: center;
+    margin: 0 auto;
 }
 
 .row {
-    border-radius: 1em;
     display: flex;
-    gap: 1em;
-    flex: 1;
+    justify-content: space-between;
+    margin-bottom: 20px;
 }
 
 .row-1 {
@@ -57,9 +57,7 @@ body {
 
 .col {
     flex: 1;
-    display: flex;
-    gap: 1em;
-    border-radius: 1em;
+    margin: 0 10px;
 }
 
 .col-1 {
@@ -177,11 +175,52 @@ body {
     transform: scale(1.05); /* Légère mise à l'échelle au survol */
 }
 
+/* Container principal de la carte */
 .text-box {
-    flex-direction: column;
-    text-align: center;
-    z-index: 1;  /* Le texte reste en dessous de l'image */
-   
+    background-color: rgba(255, 255, 255, 0.2);
+    padding: 20px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between; /* Sépare le texte à gauche et l'image à droite */
+    align-items: center;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    position: relative;
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+/* Contenu texte aligné à gauche */
+.text-content {
+    flex: 1; /* Prend tout l'espace disponible à gauche de l'image */
+    padding-right: 20px; /* Espace entre le texte et l'image */
+    max-width: 60%; /* Limite la largeur du texte pour le resserrer à gauche */
+}
+
+/* Styles pour les titres et le texte */
+.text-content p, .text-content h4 {
+    margin: 0; /* Retire les marges par défaut */
+    padding-bottom: 10px; /* Espace entre chaque élément */
+}
+
+.text-content h4 {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+}
+
+.text-content p {
+    font-size: 14px;
+    color: #666;
+    line-height: 1.5;
+}
+
+/* Image à droite */
+.text-box img {
+    height: 120px; /* Ajuste la hauteur de l'image pour correspondre à celle du contenu */
+    width: auto;
+    object-fit: cover; /* Couvre l'espace tout en gardant les proportions */
+    border-radius: 8px;
+    margin-left: 20px; /* Espace entre l'image et le texte */
 }
 
 h2 {
@@ -243,5 +282,6 @@ p {
     }
 }
 h1{
+    margin-top: 3rem;
     text-align: center;
 }

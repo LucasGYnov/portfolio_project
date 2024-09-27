@@ -82,7 +82,7 @@ body {
     flex: 1;
     border-radius: 1em;
     background-color: rgba(255, 255, 255, 0.2);
-    border: 2px solid #a80d2210;
+    border: 2px solid #ffffff10;
     backdrop-filter: blur(50px);
     transition: transform 0.3s ease-in-out, border 0.3s ease-in-out;
     display: flex;
@@ -124,6 +124,87 @@ body {
     background-color: rgba(255, 255, 255, 0.3);
 }
 
+
+.wrapper {
+    width: 90%;
+    max-width: 1536px;
+    margin-inline: auto;
+    height: 100px;
+    position: relative;
+    overflow: hidden;
+    mask-image: linear-gradient(
+      to right,
+      rgba(0, 0, 0, 0),
+      rgba(0, 0, 0, 1) 20%,
+      rgba(0, 0, 0, 1) 80%,
+      rgba(0, 0, 0, 0)
+    );
+}
+
+@keyframes scrollLeft {
+    to {
+      left: -200px;
+    }
+}
+
+.item {
+    width: 200px; /* Largeur de l'élément */
+    height: 100px; /* Hauteur de l'élément */
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 6px; /* Coins arrondis */
+    position: absolute; /* Positionnement absolu */
+    left: max(calc(200px * 8), 100%); /* Position initiale */
+    animation-name: scrollLeft; /* Animation */
+    animation-duration: 35s; /* Durée de l'animation */
+    animation-timing-function: linear; /* Fonction de timing */
+    animation-iteration-count: infinite; /* Répéter l'animation à l'infini */
+    display: flex; /* Flexbox pour centrer le contenu */
+    justify-content: center; /* Centrer horizontalement */
+    align-items: center; /* Centrer verticalement */
+}
+
+.item:hover{
+    transform: scale(1.02);
+}
+
+.item img {
+    max-width: 75%;
+    max-height: 75%;
+    object-fit: contain;
+    filter: invert(100%);
+}
+
+.item1 {
+    animation-delay: calc(35s / 8 * (8 - 1) * -1);
+}
+
+.item2 {
+    animation-delay: calc(35s / 8 * (8 - 2) * -1);
+}
+
+.item3 {
+    animation-delay: calc(35s / 8 * (8 - 3) * -1);
+}
+
+.item4 {
+    animation-delay: calc(35s / 8 * (8 - 4) * -1);
+}
+
+.item5 {
+    animation-delay: calc(35s / 8 * (8 - 5) * -1);
+}
+
+.item6 {
+    animation-delay: calc(35s / 8 * (8 - 6) * -1);
+}
+
+.item7 {
+    animation-delay: calc(35s / 8 * (8 - 7) * -1);
+}
+
+.item8 {
+    animation-delay: calc(35s / 8 * (8 - 8) * -1);
+}
 
 .profile-box {
     width: 100%;
