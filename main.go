@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+
 	// "os"
 	// "path/filepath"
 	// "regexp"
@@ -14,6 +15,7 @@ import (
 
 	"github.com/google/uuid"
 	_ "github.com/mattn/go-sqlite3"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type User struct {
@@ -25,11 +27,11 @@ type User struct {
 }
 
 type Post struct {
-	ID       int
-	Experiences    []Experience
-	Contacts 	   []Contact
-	Formations     []Formation
-	Techs          []Tech
+	ID          int
+	Experiences []Experience
+	Contacts    []Contact
+	Formations  []Formation
+	Techs       []Tech
 }
 
 type Experience struct {
@@ -93,6 +95,11 @@ func main() {
 	log.Fatal(http.ListenAndServe("localhost:6969", nil))
 }
 
+func checkPasswordHash(password, hash string) bool {
+	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
+	return err == nil
+}
+
 func renderTemplate(w http.ResponseWriter, tmpl string, data interface{}) {
 	t, err := template.ParseFiles(tmpl)
 	if err != nil {
@@ -127,7 +134,6 @@ func (h *mainPageHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	http.NotFound(w, r)
 }
 
-
 type loginHandler struct{}
 
 func (h *loginHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
@@ -147,6 +153,8 @@ func (h *loginHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			http.Redirect(w, r, "/login", http.StatusSeeOther)
 			return
 		}
+
+		// Récupérer le mot de passe haché de la base de données
 		var dbPassword string
 		err := db.QueryRow("SELECT password FROM utilisateurs WHERE username = ?", username).Scan(&dbPassword)
 		if err != nil {
@@ -160,11 +168,14 @@ func (h *loginHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			log.Println("Erreur lors de la vérification de l'utilisateur:", err)
 			return
 		}
-		if password != dbPassword {
+
+		// Vérifier le mot de passe haché
+		if !checkPasswordHash(password, dbPassword) {
 			setErrorCookie(w, "Mot de passe incorrect")
 			http.Redirect(w, r, "/login", http.StatusSeeOther)
 			return
 		}
+
 		// Créer une session
 		sessionID := uuid.New().String()
 		sessions[sessionID] = username
@@ -284,7 +295,6 @@ func (h *newPostHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	http.NotFound(w, r)
 }
-
 
 type postsHandler struct{}
 
@@ -515,8 +525,6 @@ func (h *postDetailHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	renderTemplate(w, "./src/post_detail.html", post)
 }
 
-
-
 type errorHandler struct{}
 
 func (h *errorHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
@@ -526,65 +534,65 @@ func (h *errorHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 type popupHandler struct{}
 
 func (h *popupHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-    if r.Method == http.MethodGet {
-        renderTemplate(w, "./src/popup.html", nil)
-        return
-    }
-    if r.Method == http.MethodPost {
-        if err := r.ParseForm(); err != nil {
-            http.Error(w, "Erreur lors de la lecture du formulaire", http.StatusBadRequest)
-            return
-        }
-        username := r.FormValue("username")
-        password := r.FormValue("password")
-        if password == "" {
-            setErrorCookie(w, "Username ou mot de passe vide")
-            http.Redirect(w, r, "/popup", http.StatusSeeOther)
-            return
-        }
-        var dbPassword string
-        err := db.QueryRow("SELECT password FROM utilisateurs WHERE username = ?", username).Scan(&dbPassword)
-        if err != nil {
-            if err == sql.ErrNoRows {
-                setErrorCookie(w, "Username ou mot de passe incorrect")
-                http.Redirect(w, r, "/popup", http.StatusSeeOther)
-                return
-            }
-            setErrorCookie(w, "Erreur lors de la vérification de l'utilisateur")
-            http.Redirect(w, r, "/admin", http.StatusSeeOther)
-            log.Println("Erreur lors de la vérification de l'utilisateur:", err)
-            return
-        }
-        if password != dbPassword {
-            setErrorCookie(w, "Mot de passe incorrect")
-            http.Redirect(w, r, "/popup", http.StatusSeeOther)
-            return
-        }
-        // Créer une session
-        sessionID := uuid.New().String()
-        sessions[sessionID] = username
-        cookie := &http.Cookie{
-            Name:  "session_id",
-            Value: sessionID,
-            Path:  "/",
-        }
-        http.SetCookie(w, cookie)
-        http.Redirect(w, r, "/admin", http.StatusSeeOther)
-        return
-    }
-    http.NotFound(w, r)
+	if r.Method == http.MethodGet {
+		renderTemplate(w, "./src/popup.html", nil)
+		return
+	}
+	if r.Method == http.MethodPost {
+		if err := r.ParseForm(); err != nil {
+			http.Error(w, "Erreur lors de la lecture du formulaire", http.StatusBadRequest)
+			return
+		}
+		username := r.FormValue("username")
+		password := r.FormValue("password")
+		if password == "" {
+			setErrorCookie(w, "Username ou mot de passe vide")
+			http.Redirect(w, r, "/popup", http.StatusSeeOther)
+			return
+		}
+		var dbPassword string
+		err := db.QueryRow("SELECT password FROM utilisateurs WHERE username = ?", username).Scan(&dbPassword)
+		if err != nil {
+			if err == sql.ErrNoRows {
+				setErrorCookie(w, "Username ou mot de passe incorrect")
+				http.Redirect(w, r, "/popup", http.StatusSeeOther)
+				return
+			}
+			setErrorCookie(w, "Erreur lors de la vérification de l'utilisateur")
+			http.Redirect(w, r, "/admin", http.StatusSeeOther)
+			log.Println("Erreur lors de la vérification de l'utilisateur:", err)
+			return
+		}
+		if password != dbPassword {
+			setErrorCookie(w, "Mot de passe incorrect")
+			http.Redirect(w, r, "/popup", http.StatusSeeOther)
+			return
+		}
+		// Créer une session
+		sessionID := uuid.New().String()
+		sessions[sessionID] = username
+		cookie := &http.Cookie{
+			Name:  "session_id",
+			Value: sessionID,
+			Path:  "/",
+		}
+		http.SetCookie(w, cookie)
+		http.Redirect(w, r, "/admin", http.StatusSeeOther)
+		return
+	}
+	http.NotFound(w, r)
 }
 
 type adminHandler struct{}
 
 func (h *adminHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-    // Vérifie si une session est active
-    if cookie, err := r.Cookie("session_id"); err != nil || sessions[cookie.Value] == "" {
-        // Si aucune session valide n'existe, redirige vers la page de connexion
-        http.Redirect(w, r, "/popup", http.StatusSeeOther)
-        return
-    }
+	// Vérifie si une session est active
+	if cookie, err := r.Cookie("session_id"); err != nil || sessions[cookie.Value] == "" {
+		// Si aucune session valide n'existe, redirige vers la page de connexion
+		http.Redirect(w, r, "/popup", http.StatusSeeOther)
+		return
+	}
 
-    // Si la session est valide, affiche la page admin
-    renderTemplate(w, "./src/admin.html", nil)
+	// Si la session est valide, affiche la page admin
+	renderTemplate(w, "./src/admin.html", nil)
 }
