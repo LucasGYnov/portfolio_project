@@ -77,6 +77,8 @@ func main() {
 		log.Fatal(err)
 	}
 
+	createAdmin()
+
 	http.Handle("/", &mainPageHandler{})
 	http.Handle("/login", &loginHandler{})
 	http.Handle("/newpost", &newPostHandler{})
@@ -95,9 +97,37 @@ func main() {
 	log.Fatal(http.ListenAndServe("localhost:6969", nil))
 }
 
+func hashPassword(password string) (string, error) {
+	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
+	return string(bytes), err
+}
+
 func checkPasswordHash(password, hash string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
 	return err == nil
+}
+
+func createAdmin() {
+	var username string
+	err := db.QueryRow("SELECT username FROM utilisateurs WHERE username = 'admin'").Scan(&username)
+	if err == sql.ErrNoRows {
+		// Si l'utilisateur admin n'existe pas, on le crée
+		hashedPassword, err := hashPassword("admin")
+		if err != nil {
+			log.Fatal("Erreur lors du hachage du mot de passe:", err)
+		}
+
+		_, err = db.Exec("INSERT INTO utilisateurs (username, password) VALUES (?, ?)", "admin", hashedPassword)
+		if err != nil {
+			log.Fatal("Erreur lors de la création de l'utilisateur admin:", err)
+		}
+
+		fmt.Println("Utilisateur admin créé avec succès")
+	} else if err != nil {
+		log.Fatal("Erreur lors de la vérification de l'utilisateur admin:", err)
+	} else {
+		fmt.Println("L'utilisateur admin existe déjà")
+	}
 }
 
 func renderTemplate(w http.ResponseWriter, tmpl string, data interface{}) {
@@ -550,6 +580,7 @@ func (h *popupHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			http.Redirect(w, r, "/popup", http.StatusSeeOther)
 			return
 		}
+
 		var dbPassword string
 		err := db.QueryRow("SELECT password FROM utilisateurs WHERE username = ?", username).Scan(&dbPassword)
 		if err != nil {
@@ -563,12 +594,15 @@ func (h *popupHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			log.Println("Erreur lors de la vérification de l'utilisateur:", err)
 			return
 		}
-		if password != dbPassword {
+
+		// Use the checkPasswordHash function here
+		if !checkPasswordHash(password, dbPassword) {
 			setErrorCookie(w, "Mot de passe incorrect")
 			http.Redirect(w, r, "/popup", http.StatusSeeOther)
 			return
 		}
-		// Créer une session
+
+		// Create a session
 		sessionID := uuid.New().String()
 		sessions[sessionID] = username
 		cookie := &http.Cookie{
