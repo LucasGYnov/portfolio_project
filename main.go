@@ -90,6 +90,9 @@ func main() {
 	http.Handle("/admin", &adminHandler{})
 
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static/"))))
+	http.Handle("/static/assets/", http.StripPrefix("/static/assets/", http.FileServer(http.Dir("static/assets/"))))
+	http.Handle("/static/social_Network/", http.StripPrefix("/static/social_Network/", http.FileServer(http.Dir("static/social_Network/"))))
+	http.Handle("/static/tools/", http.StripPrefix("/static/tools/", http.FileServer(http.Dir("static/tools/"))))
 	http.Handle("/src/", http.StripPrefix("/src/", http.FileServer(http.Dir("src/"))))
 	http.Handle("/images/", http.StripPrefix("/images/", http.FileServer(http.Dir("images/"))))
 
