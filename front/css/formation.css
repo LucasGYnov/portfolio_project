@@ -285,3 +285,12 @@ h1{
     margin-top: 3rem;
     text-align: center;
 }
+.menu {
+    height: 50px;
+    width: 50px;
+    transition: transform 0.3s ease; /* Durée et type de transition */
+}
+
+.menu:hover {
+    transform: scale(1.05); /* Grossissement de 20% */
+}
