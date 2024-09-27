@@ -117,7 +117,7 @@ func createAdmin() {
 		// Si l'utilisateur admin n'existe pas, on le crée
 		hashedPassword, err := hashPassword("admin")
 		if err != nil {
-			log.Fatal("Erreur lors du hachage du mot de passe:", err)
+			log.Fatal("Erreur lors du hac hage du mot de passe:", err)
 		}
 
 		_, err = db.Exec("INSERT INTO utilisateurs (username, password) VALUES (?, ?)", "admin", hashedPassword)

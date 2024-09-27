@@ -6,113 +6,115 @@
       <meta name="copyright" content="Copyright owner" />
       <!-- Favicon -->
       <link rel="icon" href="" type="image/x-icon">
-      <!-- Feuilles de style -->
-      <link rel="stylesheet" href="../static/style.css">
-      <!-- Polices Google --> 
+      <!-- Stylesheet -->
+      <link rel="stylesheet" href="static/style.css">
+      <!-- Google Fonts --> 
       <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins">
       <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rubik+Mono+One&display=swap">
       <title>Portfolio Menu Page</title>
    </head>
    <body>
-      <div class="container">
-         <div class="row row-1">
-            <div class="col col-1">
-               <div class="box c2">
-                  <h5>Hello, I'm John Cena</h5>
-                  <p>I'm an American actor, wrestler and rapper. Currently with World Wrestling Entertainment.</p>
+      <div class="portfolio-container">
+         <div class="portfolio-row row-1">
+            <div class="portfolio-col col-1">
+               <div class="info-box bio-box">
+                  <h5 class="greeting">Hello, I'm John Cena</h5>
+                  <p>I'm an American actor, wrestler, and rapper. Currently with World Wrestling Entertainment.</p>
                </div>
-               <div class="box c1">
-                  <img src="../static/img_1.jpg" alt="My profile picture" class="profile-picture">
+               <div class="info-box image-box">
+                  <img src="../static/img_1.jpg" alt="My profile picture" class="profile-image">
                </div>
             </div>
-            <div class="col col-1">
-               <div class="box c1">
-                  <img src="../static/profile.jpg" alt="My profile picture" class="profile-picture">
+            <div class="portfolio-col col-1">
+               <div class="info-box image-box">
+                  <img src="../static/profile.jpg" alt="My profile picture" class="profile-image">
                </div>
-               <div class="box c2">
-                  <h5>About me</h5>
+               <div class="info-box bio-box">
+                  <h5>About Me</h5>
                   <p>I began my professional wrestling career in 1999 in the independent Ultimate Pro Wrestling (UPW) federation, where I won the UPW World Heavyweight Championship in 2008.</p>
                </div>
             </div>
-            <div class="col col-2">
-               <div class="box text-box">
-                  <div class="info-box carousel-box">
-                     <div class="wrapper">
-                         <div class="item item1">
-                             <img src="../statics/tools/html.png" title="HTML" alt="">
-                         </div>
-                         <div class="item item2">
-                           <img src="../statics/tools/css-3.png" title="CSS" alt="">
-                         </div>
-                         <div class="item item3">
-                           <img src="../statics/tools/js.png" title="Javascript" alt="">
-                         </div>
-                         <div class="item item4">
-                           <img src="../statics/tools/java.png" title="Java" alt="">
-                         </div>
-                         <div class="item item5">
-                           <img src="../statics/tools/python.png" title="Python" alt="">
-                         </div>
-                         <div class="item item6">
-                           <img src="../statics/tools/atom.png" title="React" alt="">
-                         </div>
-                         <div class="item item7">
-                           <img src="../statics/tools/swift.png" title="Swift" alt="">
-                         </div>
-                         <div class="item item8">
-                           <img src="../statics/tools/php.png" title="PHP" alt="">
-                         </div>
-                     </div>
-                 </div>
-               </div>
+            <div class="portfolio-col col-2">
+               <div class="info-box carousel-box">
+                  <div class="wrapper">
+                      <div class="item item1">
+                          <img src="../static/tools/html.png" title="HTML" alt="">
+                      </div>
+                      <div class="item item2">
+                        <img src="../static/tools/css-3.png" title="CSS" alt="">
+                      </div>
+                      <div class="item item3">
+                        <img src="../static/tools/js.png" title="Javascript" alt="">
+                      </div>
+                      <div class="item item4">
+                        <img src="../static/tools/java.png" title="Java" alt="">
+                      </div>
+                      <div class="item item5">
+                        <img src="../static/tools/python.png" title="Python" alt="">
+                      </div>
+                      <div class="item item6">
+                        <img src="../static/tools/atom.png" title="React" alt="">
+                      </div>
+                      <div class="item item7">
+                        <img src="../static/tools/swift.png" title="Swift" alt="">
+                      </div>
+                      <div class="item item8">
+                        <img src="../static/tools/php.png" title="PHP" alt="">
+                      </div>
+                  </div>
+              </div>
             </div>
          </div>
-         <div class="row row-2">
-            <div class="box">
-               <a href="./formations.html" class="section-link">
+         <div class="portfolio-row row-2">
+            <div class="info-box section-box">
+               <a href="formations.html" class="section-link">
                   <img src="../static/formation.png" alt="Formations" width="128px">
                   <h2>Formations</h2>
                </a>
+               <a href="project.html" class="round-button">
+                  <img src="../static/arrow.png" alt="Go to Formations" class="arrow-icon">
+               </a>
             </div>
-            <div class="box">
-               <a href="../static/formation.png" class="section-link">
-                  <img src="../static/project1.png" alt="Projets" width="128px">
-                  <h2>Projets</h2>
+            <div class="info-box section-box">
+               <a href="project.html" class="section-link">
+                  <img src="../static/project1.png" alt="Projects" width="128px">
+                  <h2>Projects</h2>
+               </a>
+               <a href="formations.html" class="round-button">
+                  <img src="../static/arrow.png" alt="Go to Formations" class="arrow-icon">
                </a>
             </div>
          </div>
-         <div class="row row-3">
-            <div class="col col-3">
-               <div class="box c3">
+         <div class="portfolio-row row-3">
+            <div class="portfolio-col col-3">
+               <div class="social-box">
                   <img src="../static/social_Network/linkedin.png" alt="LinkedIn" width="50px">
                </div>
-               <div class="box c3">
+               <div class="social-box">
                   <img src="../static/social_Network/github.png" alt="GitHub" width="50px">
                </div>
-               <div class="box c3">
+               <div class="social-box">
                   <img src="../static/social_Network/enveloppe.png" alt="Email" width="50px">
                </div>
             </div>
-            <div class="col col-3">
-               <div class="box c3">
+            <div class="portfolio-col col-3">
+               <div class="social-box">
                   <img src="../static/social_Network/instagram.png" alt="Instagram" width="50px">
                </div>
-               <div class="box c3">
+               <div class="social-box">
                   <img src="../static/social_Network/twitter.png" alt="Twitter" width="50px">
                </div>
-               <div class="box c3">
-                  <img src="../static/assets/behance.png" alt="Behance" width="50px">
+               <div class="social-box">
+                  <img src="../static/social_Network/behance.png" alt="Behance" width="50px">
                </div>
             </div>
-            <div class="box boxMid">
-               <a href="./achievements.html" class="section-link">
-                  <h2>Réalisations</h2>
-               </a>
+            <div class="info2-box image-box">
+               <img src="../static/bg.png" alt="My profile picture" class="profile-image">
             </div>
-            <div class="box">
+            <div class="info-box toggle-box">
                <label class="switch">
-               <input type="checkbox">
-               <span class="slider"></span>
+                  <input type="checkbox">
+                  <span class="slider"></span>
                </label>
             </div>
          </div>
