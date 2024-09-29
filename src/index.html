@@ -87,26 +87,50 @@
          </div>
          <div class="portfolio-row row-3">
             <div class="portfolio-col col-3">
+               {{range .Contacts}}
                <div class="social-box">
-                  <img src="../static/social_Network/linkedin.png" alt="LinkedIn" width="50px">
+                  <a href="{{.Linkedin}}" target="_blank">
+                     <img src="../static/social_Network/linkedin.png" alt="LinkedIn" width="50px">
+                  </a>
                </div>
+               {{end}}
+               {{range .Contacts}}
                <div class="social-box">
-                  <img src="../static/social_Network/github.png" alt="GitHub" width="50px">
+                  <a href="{{.Github}}" target="_blank">
+                     <img src="../static/social_Network/github.png" alt="GitHub" width="50px">
+                  </a>
                </div>
+               {{end}}
+               {{range .Contacts}}
                <div class="social-box">
-                  <img src="../static/social_Network/enveloppe.png" alt="Email" width="50px">
+                  <a href="{{.Mail}}" target="_blank">
+                     <img src="../static/social_Network/enveloppe.png" alt="Email" width="50px">
+                  </a>
                </div>
+               {{end}}
             </div>
             <div class="portfolio-col col-3">
+               {{range .Contacts}}
                <div class="social-box">
-                  <img src="../static/social_Network/instagram.png" alt="Instagram" width="50px">
+                  <a href="{{.Instagram}}" target="_blank">
+                     <img src="../static/social_Network/instagram.png" alt="Instagram" width="50px">
+                  </a>
                </div>
+               {{end}}
+               {{range .Contacts}}
                <div class="social-box">
-                  <img src="../static/social_Network/twitters.png" alt="Twitter" width="50px">
+                  <a href="{{.Twitter}}" target="_blank">
+                     <img src="../static/social_Network/twitters.png" alt="Twitter" width="50px">
+                  </a>
                </div>
+               {{end}}
+               {{range .Contacts}}
                <div class="social-box">
-                  <img src="../static/assets/behance.png" alt="Behance" width="50px">
+                  <a href="{{.Behance}}" target="_blank">
+                     <img src="../static/assets/behance.png" alt="Behance" width="50px">
+                  </a>
                </div>
+               {{end}}
             </div>
             <div class="info2-box image-box">
                <img src="../static/bg.png" alt="My profile picture" class="profile-image">

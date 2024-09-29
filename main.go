@@ -78,6 +78,11 @@ type MainPageData struct {
 	IsLoggedIn     bool
 	ProfilePicture string
 	Posts          []Post
+	Moi			[]Me
+	Abouts      []About
+	Contacts    []Contact
+	Formations  []Formation
+	Projects    []Project
 }
 
 var (
@@ -162,22 +167,37 @@ func renderTemplate(w http.ResponseWriter, tmpl string, data interface{}) {
 type mainPageHandler struct{}
 
 func (h *mainPageHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	if r.Method == http.MethodGet {
-		var data MainPageData
+    if r.Method == http.MethodGet {
+        var data MainPageData
 
-		// Assurez-vous que cette requête SQL est conforme à la structure de votre base de données
-		rows, err := db.Query("SELECT m.id, a.id, c.id, f.id, p.id, u.username FROM me m JOIN utilisateurs u ON m.user_id = u.id JOIN about a ON a.user_id = u.id JOIN contact c ON c.user_id = u.id JOIN formation f ON f.user_id = u.id JOIN project p ON p.user_id = u.id")
-		if err != nil {
-			http.Error(w, "Erreur lors de la récupération des posts", http.StatusInternalServerError)
-			log.Println("Erreur lors de la récupération des posts:", err)
-			return
-		}
-		defer rows.Close()
-		renderTemplate(w, "./src/index.html", data)
-		return
-	}
-	http.NotFound(w, r)
+        // Requête SQL pour récupérer les contacts
+        rows, err := db.Query("SELECT instagram, twitter, behance, github, mail, linkedin FROM contact")
+        if err != nil {
+            http.Error(w, "Erreur lors de la récupération des contacts", http.StatusInternalServerError)
+            log.Println("Erreur lors de la récupération des contacts:", err)
+            return
+        }
+        defer rows.Close()
+
+        var contacts []Contact
+        for rows.Next() {
+            var contact Contact
+            if err := rows.Scan(&contact.Instagram, &contact.Twitter, &contact.Behance, &contact.Github, &contact.Mail, &contact.Linkedin); err != nil {
+                http.Error(w, "Erreur lors du scan des contacts", http.StatusInternalServerError)
+                log.Println("Erreur lors du scan des contacts:", err)
+                return
+            }
+            contacts = append(contacts, contact)
+        }
+
+        data.Contacts = contacts // Assignez les contacts à MainPageData
+
+        renderTemplate(w, "./src/index.html", data)
+        return
+    }
+    http.NotFound(w, r)
 }
+
 
 type loginHandler struct{}
 
