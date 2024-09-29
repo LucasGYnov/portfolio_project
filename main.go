@@ -28,35 +28,50 @@ type User struct {
 
 type Post struct {
 	ID          int
-	Experiences []Experience
+	Moi			[]Me
+	Abouts      []About
 	Contacts    []Contact
 	Formations  []Formation
-	Techs       []Tech
+	Projects    []Project
 }
 
-type Experience struct {
+type Me struct {
 	ID      int
 	Title   string
+	Content string
+}
+
+type About struct {
+	ID      int
 	Content string
 }
 
 type Contact struct {
 	ID     int
-	Numero int
-	Email  string
-	Postal string
+	Instagram string
+	Twitter  string
+	Behance string
+	Github string
+	Mail string
+	Linkedin string
 }
 
 type Formation struct {
 	ID    int
 	Title string
+	Content string
 	Years int
+	Link  string
+	Image []string
 }
 
-type Tech struct {
-	ID      int
-	Title   string
+type Project struct {
+	ID    int
+	Title string
 	Content string
+	Years int
+	Link  string
+	Image []string
 }
 
 type MainPageData struct {
@@ -90,9 +105,6 @@ func main() {
 	http.Handle("/admin", &adminHandler{})
 
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static/"))))
-	http.Handle("/static/assets/", http.StripPrefix("/static/assets/", http.FileServer(http.Dir("static/assets/"))))
-	http.Handle("/static/social_Network/", http.StripPrefix("/static/social_Network/", http.FileServer(http.Dir("static/social_Network/"))))
-	http.Handle("/static/tools/", http.StripPrefix("/static/tools/", http.FileServer(http.Dir("static/tools/"))))
 	http.Handle("/src/", http.StripPrefix("/src/", http.FileServer(http.Dir("src/"))))
 	http.Handle("/images/", http.StripPrefix("/images/", http.FileServer(http.Dir("images/"))))
 
@@ -154,7 +166,7 @@ func (h *mainPageHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		var data MainPageData
 
 		// Assurez-vous que cette requête SQL est conforme à la structure de votre base de données
-		rows, err := db.Query("SELECT e.id, c.id, f.id, t.id, u.username FROM experience e JOIN utilisateurs u ON e.exp_id = u.id JOIN contact c ON c.contact_id = u.id JOIN formation f ON f.formation_id = u.id JOIN tech t ON t.tech_id = u.id")
+		rows, err := db.Query("SELECT m.id, a.id, c.id, f.id, p.id, u.username FROM me m JOIN utilisateurs u ON m.user_id = u.id JOIN about a ON a.user_id = u.id JOIN contact c ON c.user_id = u.id JOIN formation f ON f.user_id = u.id JOIN project p ON p.user_id = u.id")
 		if err != nil {
 			http.Error(w, "Erreur lors de la récupération des posts", http.StatusInternalServerError)
 			log.Println("Erreur lors de la récupération des posts:", err)
@@ -287,37 +299,50 @@ func (h *newPostHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		}
 		title := r.FormValue("title")
 		content := r.FormValue("content")
-		numero := r.FormValue("numero")
-		email := r.FormValue("email")
-		postal := r.FormValue("postal")
 		years := r.FormValue("years")
+		link := r.FormValue("link")
+		image := r.FormValue("image")
+		instagram := r.FormValue("instagram")
+		twitter := r.FormValue("twitter")
+		behance := r.FormValue("behance")
+		github := r.FormValue("github")
+		mail := r.FormValue("mail")
+		linkedin := r.FormValue("linkedin")
 
 		// Insertion des données dans les tables correspondantes
-		_, err = db.Exec("INSERT INTO experience (title, content, exp_id) VALUES (?, ?, ?)", title, content, userID)
+		_, err = db.Exec("INSERT INTO me (title, content, user_id) VALUES (?, ?, ?)", title, content, userID)
 		if err != nil {
-			http.Error(w, "Erreur lors de la création de l'expérience", http.StatusInternalServerError)
-			log.Println("Erreur lors de l'insertion dans la table experience :", err)
+			http.Error(w, "Erreur lors de la création de me", http.StatusInternalServerError)
+			log.Println("Erreur lors de l'insertion dans la table me :", err)
 			return
 		}
 
-		_, err = db.Exec("INSERT INTO contact (numero, email, postal, contact_id) VALUES (?, ?, ?, ?)", numero, email, postal, userID)
+		// Insertion des données dans les tables correspondantes
+		_, err = db.Exec("INSERT INTO about (content, user_id) VALUES (?, ?)", content, userID)
+		if err != nil {
+			http.Error(w, "Erreur lors de la création de l'expérience", http.StatusInternalServerError)
+			log.Println("Erreur lors de l'insertion dans la table me :", err)
+			return
+		}
+
+		_, err = db.Exec("INSERT INTO contact (instagram, twitter, behance, github, mail, linkedin, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", instagram, twitter, behance, github, mail, linkedin, userID)
 		if err != nil {
 			http.Error(w, "Erreur lors de la création du contact", http.StatusInternalServerError)
 			log.Println("Erreur lors de l'insertion dans la table contact :", err)
 			return
 		}
 
-		_, err = db.Exec("INSERT INTO formation (title, content, years, formation_id) VALUES (?, ?, ?, ?)", title, content, years, userID)
+		_, err = db.Exec("INSERT INTO formation (title, content, years, link, image, user_id) VALUES (?, ?, ?, ?, ?, ?)", title, content, years, link, image, userID)
 		if err != nil {
 			http.Error(w, "Erreur lors de la création de la formation", http.StatusInternalServerError)
 			log.Println("Erreur lors de l'insertion dans la table formation :", err)
 			return
 		}
 
-		_, err = db.Exec("INSERT INTO tech (title, content, tech_id) VALUES (?, ?, ?)", title, content, userID)
+		_, err = db.Exec("INSERT INTO project (title, content, years, link, image, user_id) VALUES (?, ?, ?, ?, ?, ?)", title, content, years, link, image, userID)
 		if err != nil {
-			http.Error(w, "Erreur lors de la création de la technologie", http.StatusInternalServerError)
-			log.Println("Erreur lors de l'insertion dans la table tech :", err)
+			http.Error(w, "Erreur lors de la création du project", http.StatusInternalServerError)
+			log.Println("Erreur lors de l'insertion dans la table project :", err)
 			return
 		}
 
@@ -335,11 +360,19 @@ func (h *postsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodGet {
 		var posts []Post
 
-		// Récupération des expériences
-		experiences, err := fetchExperiences()
+		// Récupération des me
+		mes, err := fetchMes()
 		if err != nil {
-			http.Error(w, "Erreur lors de la récupération des expériences", http.StatusInternalServerError)
-			log.Println("Erreur lors de la récupération des expériences:", err)
+			http.Error(w, "Erreur lors de la récupération des me", http.StatusInternalServerError)
+			log.Println("Erreur lors de la récupération des me:", err)
+			return
+		}
+
+		// Récupération des about
+		abouts, err := fetchAbout()
+		if err != nil {
+			http.Error(w, "Erreur lors de la récupération des about", http.StatusInternalServerError)
+			log.Println("Erreur lors de la récupération des about:", err)
 			return
 		}
 
@@ -359,20 +392,21 @@ func (h *postsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		// Récupération des technologies
-		techs, err := fetchTechs()
+		// Récupération des project
+		projects, err := fetchProjects()
 		if err != nil {
-			http.Error(w, "Erreur lors de la récupération des technologies", http.StatusInternalServerError)
-			log.Println("Erreur lors de la récupération des technologies:", err)
+			http.Error(w, "Erreur lors de la récupération des projects", http.StatusInternalServerError)
+			log.Println("Erreur lors de la récupération des projects:", err)
 			return
 		}
 
 		// Création d'un post avec les données récupérées
 		post := Post{
-			Experiences: experiences,
+			Moi: 		 mes,
+			Abouts:      abouts,
 			Contacts:    contacts,
 			Formations:  formations,
-			Techs:       techs,
+			Projects:    projects,
 		}
 
 		// Ajout à la liste des posts
@@ -386,28 +420,47 @@ func (h *postsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	http.NotFound(w, r)
 }
 
-// Fonction pour récupérer les expériences depuis la base de données
-func fetchExperiences() ([]Experience, error) {
-	rows, err := db.Query("SELECT id, title, content FROM experience")
+// Fonction pour récupérer les me depuis la base de données
+func fetchMes() ([]Me, error) {
+	rows, err := db.Query("SELECT id, title, content FROM me")
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 
-	var experiences []Experience
+	var mes []Me
 	for rows.Next() {
-		var exp Experience
-		if err := rows.Scan(&exp.ID, &exp.Title, &exp.Content); err != nil {
+		var mois Me
+		if err := rows.Scan(&mois.ID, &mois.Title, &mois.Content); err != nil {
 			return nil, err
 		}
-		experiences = append(experiences, exp)
+		mes = append(mes, mois)
 	}
-	return experiences, nil
+	return mes, nil
+}
+
+// Fonction pour récupérer les about depuis la base de données
+func fetchAbout() ([]About, error) {
+	rows, err := db.Query("SELECT id, content FROM about")
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var ab []About
+	for rows.Next() {
+		var abs About
+		if err := rows.Scan(&abs.ID, &abs.Content); err != nil {
+			return nil, err
+		}
+		ab = append(ab, abs)
+	}
+	return ab, nil
 }
 
 // Fonction pour récupérer les contacts depuis la base de données
 func fetchContacts() ([]Contact, error) {
-	rows, err := db.Query("SELECT id, numero, email, postal FROM contact")
+	rows, err := db.Query("SELECT id, instagram, twitter, behance, github, mail, linkedin, image FROM contact")
 	if err != nil {
 		return nil, err
 	}
@@ -416,7 +469,7 @@ func fetchContacts() ([]Contact, error) {
 	var contacts []Contact
 	for rows.Next() {
 		var contact Contact
-		if err := rows.Scan(&contact.ID, &contact.Numero, &contact.Email, &contact.Postal); err != nil {
+		if err := rows.Scan(&contact.ID, &contact.Instagram, &contact.Twitter, &contact.Behance, &contact.Github, &contact.Mail, &contact.Linkedin); err != nil {
 			return nil, err
 		}
 		contacts = append(contacts, contact)
@@ -426,7 +479,7 @@ func fetchContacts() ([]Contact, error) {
 
 // Fonction pour récupérer les formations depuis la base de données
 func fetchFormations() ([]Formation, error) {
-	rows, err := db.Query("SELECT id, title, years FROM formation")
+	rows, err := db.Query("SELECT id, title, content, years, link, image FROM formation")
 	if err != nil {
 		return nil, err
 	}
@@ -435,7 +488,7 @@ func fetchFormations() ([]Formation, error) {
 	var formations []Formation
 	for rows.Next() {
 		var formation Formation
-		if err := rows.Scan(&formation.ID, &formation.Title, &formation.Years); err != nil {
+		if err := rows.Scan(&formation.ID, &formation.Title, &formation.Content, &formation.Years, &formation.Link); err != nil {
 			return nil, err
 		}
 		formations = append(formations, formation)
@@ -443,23 +496,23 @@ func fetchFormations() ([]Formation, error) {
 	return formations, nil
 }
 
-// Fonction pour récupérer les technologies depuis la base de données
-func fetchTechs() ([]Tech, error) {
-	rows, err := db.Query("SELECT id, title, content FROM tech")
+// Fonction pour récupérer les project depuis la base de données
+func fetchProjects() ([]Project, error) {
+	rows, err := db.Query("SELECT id, title, content, years, link, image FROM project")
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 
-	var techs []Tech
+	var projects []Project
 	for rows.Next() {
-		var tech Tech
-		if err := rows.Scan(&tech.ID, &tech.Title, &tech.Content); err != nil {
+		var project Project
+		if err := rows.Scan(&project.ID, &project.Title, &project.Content, &project.Years, &project.Link); err != nil {
 			return nil, err
 		}
-		techs = append(techs, tech)
+		projects = append(projects, project)
 	}
-	return techs, nil
+	return projects, nil
 }
 
 type postDetailHandler struct{}
@@ -504,11 +557,11 @@ func (h *postDetailHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	var post Post
 
 	// Récupération des détails du post et des commentaires pour la requête GET
-	var experience Experience
+	var me Me
 
-	// Récupération des informations sur l'expérience
-	err := db.QueryRow("SELECT e.id, e.title, e.content, u.username FROM experience e JOIN utilisateurs u ON e.exp_id = u.id WHERE e.id = ?", postID).
-		Scan(&experience.ID, &experience.Title, &experience.Content)
+	// Récupération des informations sur me
+	err := db.QueryRow("SELECT m.id, m.title, m.content, u.username FROM me m JOIN utilisateurs u ON m.user_id = u.id WHERE m.id = ?", postID).
+		Scan(&me.ID, &me.Title, &me.Content)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			http.Error(w, "Post non trouvé", http.StatusNotFound)
@@ -519,10 +572,21 @@ func (h *postDetailHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Récupération des informations de about
+	var abs About
+	err = db.QueryRow("SELECT a.id, a.content, u.username FROM about a JOIN utilisateurs u ON a.user_id = u.id WHERE a.id = ?", postID).
+		Scan(&abs.ID,&abs.Content)
+	if err != nil && err != sql.ErrNoRows {
+		http.Error(w, "Erreur lors de la récupération des about", http.StatusInternalServerError)
+		log.Println("Erreur lors de la récupération des about:", err)
+		return
+	}
+	
+
 	// Récupération des informations de contact
 	var contact Contact
-	err = db.QueryRow("SELECT c.id, c.numero, c.email, c.postal, u.username FROM contact c JOIN utilisateurs u ON c.contact_id = u.id WHERE c.id = ?", postID).
-		Scan(&contact.ID, &contact.Numero, &contact.Email, &contact.Postal)
+	err = db.QueryRow("SELECT c.id, c.instagram, c.twitter, c.behance, c.github, c.mail, c.linkedin, c.image, u.username FROM contact c JOIN utilisateurs u ON c.user_id = u.id WHERE c.id = ?", postID).
+		Scan(&contact.ID, &contact.Instagram, &contact.Twitter, &contact.Behance, &contact.Github, &contact.Mail, &contact.Linkedin)
 	if err != nil && err != sql.ErrNoRows {
 		http.Error(w, "Erreur lors de la récupération des contacts", http.StatusInternalServerError)
 		log.Println("Erreur lors de la récupération des contacts:", err)
@@ -531,28 +595,30 @@ func (h *postDetailHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	// Récupération des informations de formation
 	var formation Formation
-	err = db.QueryRow("SELECT f.id, f.title, f.years, u.username FROM formation f JOIN utilisateurs u ON f.formation_id = u.id WHERE f.id = ?", postID).
-		Scan(&formation.ID, &formation.Title, &formation.Years)
+	err = db.QueryRow("SELECT f.id, f.title, f.content, f.years, f.link, f.image, u.username FROM formation f JOIN utilisateurs u ON f.user_id = u.id WHERE f.id = ?", postID).
+		Scan(&formation.ID, &formation.Title, &formation.Content, &formation.Years, &formation.Link)
 	if err != nil && err != sql.ErrNoRows {
 		http.Error(w, "Erreur lors de la récupération des formations", http.StatusInternalServerError)
 		log.Println("Erreur lors de la récupération des formations:", err)
 		return
 	}
 
-	// Récupération des informations sur les technologies
-	var tech Tech
-	err = db.QueryRow("SELECT t.id, t.title, t.content, u.username FROM tech t JOIN utilisateurs u ON t.tech_id = u.id WHERE t.id = ?", postID).
-		Scan(&tech.ID, &tech.Title, &tech.Content)
+	// Récupération des informations sur les project
+	var project Project
+	err = db.QueryRow("SELECT p.id, p.title, p.content, p.years, p.link, p.image, u.username FROM project p JOIN utilisateurs u ON p.user_id = u.id WHERE p.id = ?", postID).
+		Scan(&project.ID, &project.Title, &project.Content, &project.Years, &project.Link)
 	if err != nil && err != sql.ErrNoRows {
-		http.Error(w, "Erreur lors de la récupération des technologies", http.StatusInternalServerError)
-		log.Println("Erreur lors de la récupération des technologies:", err)
+		http.Error(w, "Erreur lors de la récupération des projects", http.StatusInternalServerError)
+		log.Println("Erreur lors de la récupération des projects:", err)
 		return
 	}
 
 	// Ajout des autres informations au struct post
+	post.Moi = []Me{}
+	post.Abouts = []About{}
 	post.Contacts = []Contact{}
 	post.Formations = []Formation{}
-	post.Techs = []Tech{}
+	post.Projects = []Project{}
 
 	// Rendu du template avec les données récupérées
 	renderTemplate(w, "./src/post_detail.html", post)

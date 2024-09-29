@@ -20,37 +20,54 @@ func InitDB() (*sql.DB, error) {
         password TEXT NOT NULL
     );
 
-    CREATE TABLE IF NOT EXISTS experience (
+	CREATE TABLE IF NOT EXISTS me (
         id INTEGER PRIMARY KEY,
         title TEXT,
         content TEXT,
-        exp_id INTEGER,
-		FOREIGN KEY (exp_id) REFERENCES utilisateurs (id)
+        user_id INTEGER,
+		post_id INTEGER
+    );
+
+    CREATE TABLE IF NOT EXISTS about (
+        id INTEGER PRIMARY KEY,
+        content TEXT,
+        user_id INTEGER,
+		post_id INTEGER
     );
 
     CREATE TABLE IF NOT EXISTS contact (
         id INTEGER PRIMARY KEY,
-		numero TEXT,
-		email TEXT,
-		postal TEXT,
-		contact_id INTEGER,
-		FOREIGN KEY (contact_id) REFERENCES utilisateurs (id)
+		instagram TEXT,
+		twitter TEXT,
+		behance TEXT,
+		github TEXT,
+		mail TEXT,
+		linkedin TEXT,
+		image BLOB,
+		user_id INTEGER,
+		post_id INTEGER
     );
 
     CREATE TABLE IF NOT EXISTS formation (
         id INTEGER PRIMARY KEY,
 		title TEXT,
+		content TEXT,
 		years TEXT,
-		formation_id INTEGER,
-		FOREIGN KEY (formation_id) REFERENCES utilisateurs (id)
+		link TEXT,
+		image BLOB,
+		user_id INTEGER,
+		post_id INTEGER
     );
 
-    CREATE TABLE IF NOT EXISTS tech (
+	CREATE TABLE IF NOT EXISTS project (
         id INTEGER PRIMARY KEY,
 		title TEXT,
 		content TEXT,
-		tech_id INTEGER,
-		FOREIGN KEY (tech_id) REFERENCES utilisateurs (id)
+		years TEXT,
+		link TEXT,
+		image BLOB,
+		user_id INTEGER,
+		post_id INTEGER
     );
 
     `
